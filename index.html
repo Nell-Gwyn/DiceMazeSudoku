@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Dice Maze Sudoku</title>
+<style>
+    
+    html {
+        font-size: 8px;
+    }
+    
+    body {
+        font-family: Helvetica,Arial,sans-serif;
+        background-color: #555;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    #mazeholder, #mazegrid, #thecube, #theslider {
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+    }
+    
+    #mainmenu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 7.5em;
+        background-color: #505;
+        border-bottom: 0.5em solid #000;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    
+    .menubtn {
+        position: absolute;
+        top: 0.75em;
+        height: 4.7em;
+        width: 14.25em;
+        background-color: #0af;
+        border-radius: 3em;
+        border: 0.3em solid #000;
+        color: #fff;
+    }
+    
+    .menubtn:hover {
+        background-color: #0fa;
+        border: 0.3em solid #fff;
+        color: #000;
+    }
+    
+    .menubtn>div {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        color: inherit;
+        text-align: center;
+        top: 0.5em;
+        font-size: 2em;
+        font-weight: bold;
+        pointer-events: none;
+    }
+    
+    .menu-panel {
+        position: fixed;
+        display: none;
+        background-color: #55a;
+        border: 0.5em solid #5af;
+        padding: 0.75em;
+        border-radius: 2em;
+        opacity: 0;
+        -webkit-transition: all 0.33s;
+        transition: all 0.33s;
+        z-index: 10;
+    }
+    
+    .panel-contents {
+        position: absolute;
+        width: 95%;
+        height: 98%;
+        opacity: 0;
+        font-size: 2em;
+        overflow: scroll;
+        color: #aff;
+        -webkit-transition: all 0.33s ease-in-out;
+        transition: all 0.33s ease-in-out;
+    }
+    
+    #padholder {
+        display: block;
+        position: relative;
+        top: 0em;
+        left: 0em;
+    }
+    
+    #tiltholder {
+        position: absolute;
+        top: 58em;
+        left: 0.8em;
+        width: 31.2em;
+        height: 31.2em;
+        background-color: #505;
+        border-radius: 4em;
+        outline: 0.8em solid #aaa;
+    }
+    
+    #bleveler {
+        position: absolute;
+        top: 7.8em;
+        left: 0.8em;
+        width: 31.2em;
+        height: 1em;
+        background-color: #05a;
+        z-index: 5
+    }
+    
+    #numpad {
+        position: absolute;
+        top: 7.2em;
+        width: 32.8em;
+        height: 33.6em;
+        background-color: #05a;
+        border: 0.8em solid #aaa;
+        border-radius: 0em 0em 4em 4em;
+        z-index: 2;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    
+    .guibtn {
+        position: absolute;
+        display: block;
+        height: 8em;
+        width: 8em;
+        border: 0.4em solid #7f7f7f;
+        border-radius: 1em;
+        cursor: pointer;
+    }
+    
+    .paddice {
+        background-color: #05a;
+    }
+    
+    .guibtn:hover {
+        border: 0.4em solid #fff;
+    }
+    
+    .padnum:not(.colourtab), .b_low {
+        background-color: #505;
+    }
+    
+    .padnum:not(.colourtab):hover, .b_low:hover {
+        background-color: #50a;
+    }
+    
+    .paddice:hover {
+        background-color: #55a;
+    }
+    
+    .colourtab#num_1 { background-color: #0a0; }
+    .colourtab#num_2 { background-color: #f55; }
+    .colourtab#num_3 { background-color: #aaa; }
+    .colourtab#num_4 { background-color: #a50; }
+    .colourtab#num_5 { background-color: #0aa; }
+    .colourtab#num_6 { background-color: #fa5; }
+    .colourtab#num_7 { background-color: #5ff; }
+    .colourtab#num_8 { background-color: #a0a; }
+    .colourtab#num_9 { background-color: #00a; }
+    
+    .b_low {
+        outline: 0.8em solid #aaa;
+    }
+    
+    .tabbtn {
+        position: absolute;
+        height: 8em;
+        width: 8.7em;
+        background-color: #000;
+        border: solid #aaa;
+        border-width: 0.8em 0.8em 0em 0.8em;
+        border-radius: 2em 2em 0em 0em;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    
+    .tabbtn>svg, .guibtn>svg, #mazegrid svg {
+        pointer-events:none;
+    }
+    
+    .noncur {
+        z-index: 1;
+        cursor: pointer;
+    }
+    
+    .noncur:hover {
+        background-color: #055;
+    }
+    
+    .curtab {
+        background-color: #05a;
+        border-color: #aaa;
+        z-index: 3;
+    }
+    
+    #mazegrid {
+        height: 100%;
+        width: 100%;
+        background-color: #000;
+        position: relative;
+        user-select: none;
+    }
+    
+    .boxborder {
+        position: absolute;
+        pointer-events: none;
+        z-index: 2;
+    }
+    
+    .maze-cell {
+        display: inline-block;
+        position: absolute;
+        cursor: pointer;
+        height: 10em;
+        width: 10em;
+        box-sizing: border-box;
+    }
+    
+    .num-container {
+        position: absolute;
+        height: 10em;
+        width: 10em;
+        pointer-events: none;
+        z-index: 4;
+    }
+    
+    .cell-numbers {
+        position: absolute;
+        color: #55f;
+        padding-top: 0.2em;
+        width: 100%;
+        height: 100%;
+        white-space: pre;
+        font-size: 1.5em;
+        line-height: 1.25em;
+        text-align: center;
+        font-family: "Lucida Console", monospace;
+    }
+    
+    #thecube {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    
+    #theslider {
+        position: absolute;
+        pointer-events: none;
+        -webkit-animation: none;
+        animation: none;
+    }
+    
+    .diceface {
+        position: absolute;
+        float: left;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+    
+    #decor {
+        position: absolute;
+        z-index: 3;
+    }
+    
+    @-webkit-keyframes raisedice {
+        0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);}
+        50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);}
+        100% {-webkit-transform:translateZ(5.3em); transform:translateZ(5.3em);}
+    }
+    @keyframes raisedice {
+        0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);}
+        50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);}
+        100% {-webkit-transform:translateZ(5.3em);transform:translateZ(5.3em);}
+    }
+    
+    
+</style>
+
+</head>
+
+<body style="font-size:8px;" onresize="reSizing()">
+    <div id="mazeholder" style="position:absolute;top:12.5em;left:10em;perspective:125em;">
+        <div id="mazegrid" style="border:0.66em solid black; border-radius:0.66em;">
+            <svg id="decor" width="100%" height="100%"></svg>
+            <div id="theslider" style="width:10em; height:10em; -webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);">
+                <div id="thecube">
+                    <div class="diceface" id="d_one" style="-webkit-transform:translateZ(5em); transform:translateZ(5em); background-color:rgba(255, 0, 0, 0.77); border:0.08em solid black;">
+                        <svg width="100%" height="100%">
+                           <circle cx="50%" cy="50%" r="13.5%" stroke="#000" stroke-width="3.5%" fill="#fff" />
+                        </svg>
+                    </div>
+                    <div class="diceface" id="d_two" style="-webkit-transform:rotateX(-90deg) translateZ(5em); transform:rotateX(-90deg) translateZ(5em); background-color:rgba(0, 255, 0, 0.8); border:0.08em solid black;">
+                        <svg width="100%" height="100%">
+                           <circle cx="31%" cy="69%" r="12.6%" stroke="#000" stroke-width="3%" fill="#fff" />
+                           <circle cx="69%" cy="31%" r="12.6%" stroke="#000" stroke-width="3%" fill="#fff" />
+                        </svg>
+                    </div>
+                    <div class="diceface" id="d_three" style="-webkit-transform:rotateY(90deg) translateZ(5em); transform:rotateY(90deg) translateZ(5em); background-color:rgba(0, 0, 255, 0.7); border:0.08em solid black;">
+                        <svg width="100%" height="100%">
+                           <circle cx="25%" cy="75%" r="11.8%" stroke="#000" stroke-width="2.75%" fill="#fff" />
+                           <circle cx="50%" cy="50%" r="11.8%" stroke="#000" stroke-width="2.75%" fill="#fff" />
+                           <circle cx="75%" cy="25%" r="11.8%" stroke="#000" stroke-width="2.75%" fill="#fff" />
+                        </svg>
+                    </div>
+                    <div class="diceface" id="d_four" style="-webkit-transform:rotateY(-90deg) translateZ(5em); transform:rotateY(-90deg) translateZ(5em); background-color:rgba(0, 255, 255, 0.8); border:0.08em solid black;">
+                        <svg width="100%" height="100%">
+                           <circle cx="30%" cy="30%" r="11.1%" stroke="#000" stroke-width="2.5%" fill="#fff" />
+                           <circle cx="30%" cy="70%" r="11.1%" stroke="#000" stroke-width="2.5%" fill="#fff" />
+                           <circle cx="70%" cy="30%" r="11.1%" stroke="#000" stroke-width="2.5%" fill="#fff" />
+                           <circle cx="70%" cy="70%" r="11.1%" stroke="#000" stroke-width="2.5%" fill="#fff" />
+                        </svg>
+                    </div>
+                    <div class="diceface" id="d_five" style="-webkit-transform:rotateX(90deg) translateZ(5em); transform:rotateX(90deg) translateZ(5em); background-color:rgba(255, 0, 255, 0.77); border:0.08em solid black;">
+                        <svg width="100%" height="100%">
+                           <circle cx="25%" cy="25%" r="10.5%" stroke="#000" stroke-width="2.25%" fill="#fff" />
+                           <circle cx="25%" cy="75%" r="10.5%" stroke="#000" stroke-width="2.25%" fill="#fff" />
+                           <circle cx="75%" cy="25%" r="10.5%" stroke="#000" stroke-width="2.25%" fill="#fff" />
+                           <circle cx="75%" cy="75%" r="10.5%" stroke="#000" stroke-width="2.25%" fill="#fff" />
+                           <circle cx="50%" cy="50%" r="10.5%" stroke="#000" stroke-width="2.25%" fill="#fff" />
+                        </svg>
+                    </div>
+                    <div class="diceface" id="d_six" style="-webkit-transform:rotateY(180deg) translateZ(5em); transform:rotateY(180deg) translateZ(5em); background-color:rgba(255, 255, 0, 0.8); border:0.08em solid black;">
+                        <svg width="100%" height="100%">
+                           <circle cx="22%" cy="30%" r="10%" stroke="#000" stroke-width="2%" fill="#fff" />
+                           <circle cx="50%" cy="30%" r="10%" stroke="#000" stroke-width="2%" fill="#fff" />
+                           <circle cx="78%" cy="30%" r="10%" stroke="#000" stroke-width="2%" fill="#fff" />
+                           <circle cx="22%" cy="70%" r="10%" stroke="#000" stroke-width="2%" fill="#fff" />
+                           <circle cx="50%" cy="70%" r="10%" stroke="#000" stroke-width="2%" fill="#fff" />
+                           <circle cx="78%" cy="70%" r="10%" stroke="#000" stroke-width="2%" fill="#fff" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="controlpanel" style="position:absolute;top:12.5em;">
+        <div id="padholder">
+            <div id="bleveler"></div>
+            <div id="tab_number" class="tabbtn curtab" onclick="deftab='number';changeTab('number', false)">
+                <svg height="100%" width="100%">
+                    <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
+                    <text x="0.55em" y="1.1em" font-size="4.4em" font-weight="bold" fill="#fff">1</text>
+                    <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">z</text>
+                </svg>
+            </div>
+            <div id="tab_corner" class="tabbtn noncur" style="left:8.033em;" onclick="deftab='corner';changeTab('corner', false)">
+                <svg height="100%" width="100%">
+                    <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
+                    <text x="0.82em" y="1.35em" font-size="1.75em" font-weight="bold" fill="#fff">1</text>
+                    <text x="2.88em" y="1.35em" font-size="1.75em" font-weight="bold" fill="#fff">2</text>
+                    <text x="0.82em" y="3.125em" font-size="1.75em" font-weight="bold" fill="#fff">3</text>
+                    <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">x</text>
+                </svg>
+            </div>
+            <div id="tab_centre" class="tabbtn noncur" style="left:16.066em;" onclick="deftab='centre';changeTab('centre', false)">
+                <svg height="100%" width="100%">
+                    <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
+                    <text x="1.25em" y="2.25em" font-size="1.75em" font-weight="bold" fill="#fff">123</text>
+                    <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">c</text>
+                </svg>
+            </div>
+            <div id="tab_colour" class="tabbtn noncur" style="left:24.1em;" onclick="deftab='colour';changeTab('colour', false)">
+                <svg height="100%" width="100%">
+                    <rect x="1.1em" y="0.75em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#0a0"/>
+                    <rect x="2.85em" y="0.75em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#f55"/>
+                    <rect x="4.6em" y="0.75em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#aaa"/>
+                    <rect x="1.1em" y="2.48em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#a50"/>
+                    <rect x="2.85em" y="2.48em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#0aa"/>
+                    <rect x="4.6em" y="2.48em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#fa5"/>
+                    <rect x="1.1em" y="4.21em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#5ff"/>
+                    <rect x="2.85em" y="4.21em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#a0a"/>
+                    <rect x="4.6em" y="4.21em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#00a"/>
+                    <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
+                    <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">v</text>
+                </svg>
+            </div>
+            <div id="numpad">
+                <div class="guibtn padnum" id="num_1" style="top:2em;left:1.4em;" onclick="mademove(updateCells(1, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">1</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_2" style="top:2em;left:11.4em;" onclick="mademove(updateCells(2, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">2</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_3" style="top:2em;left:21.4em;" onclick="mademove(updateCells(3, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">3</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_4" style="top:12em;left:1.4em;" onclick="mademove(updateCells(4, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">4</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_5" style="top:12em;left:11.4em;" onclick="mademove(updateCells(5, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">5</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_6" style="top:12em;left:21.4em;" onclick="mademove(updateCells(6, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">6</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_7" style="top:22em;left:1.4em;" onclick="mademove(updateCells(7, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">7</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_8" style="top:22em;left:11.4em;" onclick="mademove(updateCells(8, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">8</text></svg>
+                </div>
+                <div class="guibtn padnum" id="num_9" style="top:22em;left:21.4em;" onclick="mademove(updateCells(9, selectedcells, currenttab))">
+                    <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">9</text></svg>
+                </div>
+                <div class="guibtn b_low" style="top:33.5em;left:1.4em;" onclick="mademove(delNums(selectedcells, currenttab))">
+                    <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                        <polygon points="15,50 35,25 85,25 85,75 35,75" style="fill:transparent;stroke:#fff;stroke-width:8" />
+                        <line x1="49" y1="42" x2="65" y2="58" style="stroke:#fff;stroke-width:8;stroke-linecap:round;" />
+                        <line x1="65" y1="42" x2="49" y2="58" style="stroke:#fff;stroke-width:8;stroke-linecap:round;" />
+                        <text x="70" y="96" font-size="1.7em" font-weight="bold" fill="#aaf">del</text>
+                    </svg>
+                </div>
+                <div class="guibtn b_low" id="undoer" style="top:33.5em;left:11.4em;" onclick="unDo()">
+                    <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                        <path d="M77 60 Q77 35 52 35 Q27 35 27 60" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                        <polyline points="41,54 28,67 15,54" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                        <text x="58" y="96" font-size="1.7em" font-weight="bold" fill="#aaf">ctrl-Z</text>
+                    </svg>
+                </div>
+                <div class="guibtn b_low" id="redoer" style="top:33.5em;left:21.4em;" onclick="reDo()">
+                    <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                        <path d="M77 60 Q77 35 52 35 Q27 35 27 60" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                        <polyline points="63,54 76,67 89,54" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                        <text x="58" y="96" font-size="1.7em" font-weight="bold" fill="#aaf">ctrl-Y</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div id="tiltholder">
+            <div class="guibtn paddice" id="mov_n" style="top:1.2em;left:11.2em;" onclick="moveDice('n')">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <polygon points="40,80 60,80 60,50 80,50 50,20 20,50 40,50" style="fill:#fff" />
+                    <text x="77" y="94" font-size="2em" font-weight="bold" fill="#faa">W</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="mov_w" style="top:11.2em;left:1.2em;" onclick="moveDice('w')">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <polygon points="80,40 80,60 50,60 50,80 20,50 50,20 50,40" style="fill:#fff" />
+                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">A</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="mov_e" style="top:11.2em;left:21.2em;" onclick="moveDice('e')">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <polygon points="20,40 20,60 50,60 50,80 80,50 50,20 50,40" style="fill:#fff" />
+                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">D</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="mov_s" style="top:21.2em;left:11.2em;" onclick="moveDice('s')">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <polygon points="40,20 60,20 60,50 80,50 50,80 20,50 40,50" style="fill:#fff" />
+                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">S</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="rs_d" style="height:7em;width:7em;top:11.7em;left:11.7em;" onclick="rsDice()">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <path d="M52 75 Q77 75 77 50 Q77 25 52 25 Q27 25 27 50" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <polyline points="41,42 28,55 15,42" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">R</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div id="mainmenu">
+        <div class="menubtn" id="m_rules" style="right:5em;" onclick="showRules(event)"><div>Rules</div></div>
+    </div>
+    <div class="menu-panel" id="rules-panel" style="display:none;height:10em;width:40em;top:10em;right:1em;"><div class="panel-contents">
+        <div style="text-align:center;font-weight:bold;">RULES & CONTROLS</div>
+        <ol style="list-style-type:upper-roman">
+            <li>Normal sudoku rules apply (every row, column, and 3x3 box must contain all the digits 1 to 9 once each).</li>
+            <li>The finished grid contains a Dice Maze. <ol style="list-style-type:lower-alpha">
+                <li>The dice starts in r1c1 (the cell labeled "Start"), with a 2 on top and a 1 facing south. The dice must travel from there to r9c8 (the cell labeled "Goal").</li>
+                <li>The dice moves by rolling orthogonally (use WASD keys, or the labeled buttons on the side panel).</li>
+                <li>The dice can only move onto a cell that contains the same digit currently on top of the dice. <ul><li>For instance: if a 2 is on top of the dice, the next cell it moves onto must contain a 2. If a 6 is on top after that move, the next cell it moves to from there must contain a 6, and so on.</li></ul></li>
+                <li>The dice path can cross the same cell multiple times.</li>
+            </ol></li>
+            <li>Digits in arrows must sum to the digit in the circle.<ol style="list-style-type:lower-alpha">
+                <li>If the dice enters an arrow's circle, it must then travel along the entire length of that arrow from the circle to the arrowhead (it may exit the final arrow cell in any direction).</li>
+            </ol></li>
+            <li>Cells marked with a square are even, cells marked with a (solid) circle are odd.<ol style="list-style-type:lower-alpha">
+                <li>Cells with green shapes are on the dice path, cells with red shapes are not on the dice path. Gray shapes may be either.</li>
+            </ol></li>
+            <li>For more examples and clarifications, see "About" panel <i>(to be added, sorry about that!)</i></li>
+        </ol>
+    </div></div>
+
+<script>
+    
+    "use strict";
+    
+    var cellnums = {
+        corners: [],
+        centres: []
+    }; // tracking what numbers the user has put in each cell
+    
+    var undohistory = []; // stores movements for undo/redo
+    var undoptr = 0; // where the pointer currently is
+    
+    var const_raints = [['<polygon points="40,20 60,20 60,40 80,40 80,60 60,60 60,80 40,80 40,60 20,60 20,40 40,40" />']]; // the various constraint tools, and SVGs for same
+    
+    var selectedcells = []; // which cells the user has selected
+    var givendigits = []; // given digits
+    var currenttab = "number"; // which tab is the current one
+    var deftab = "number"; // which tab to return to when the shift and ctrl keys are released
+    var keysheld = []; // whether the shift and/or ctrl keys are held
+    
+    var sel_ptr = [1,1]; // the arrow-key-controlled selection pointer
+    var started = [0,0,0,0]; // where the dice starts and where it's facing
+    
+    var mousestatus = [0,0,null]; // mouse coordinates and what it's doing
+    
+    var gridrotation = [0,0]; // how far the grid is tilted
+    var turningback = false; // whether the grid is currently reversing a turn
+    
+    var diceinmotion = false; // whether the dice is currently moving (and thus cannot start another move)
+    
+    var nottilted = false; // whether the grid was tilted during this tilt cycle (used to deselect all)
+    
+    var gridsize = [1,1]; // the size of the grid
+    var dicefacing = [1,2]; // the number on top of the dice, and the number facing south
+    var d_coords = [0,0]; // starting location of the dice (row, column)
+    
+    var antoggler = 0; // which of the two dice slider raises is playing
+    
+    var edhistory = []; // the undo queue
+    
+    var screenorientation = "h"; // whether the viewport is wider than it is tall, or vice versa
+    
+    var paneltransit = [false]; // which panels are doing something
+    
+    var turntable = [[[[2,6],[5,1],[4,2],[3,2]],[[3,6],[4,1],[2,3],[5,3]],[[4,6],[3,1],[5,4],[2,4]],[[5,6],[2,1],[3,5],[4,5]],[[1,5],[6,2],[3,1],[4,1]],[[3,5],[4,2],[6,3],[1,3]],[[4,5],[3,2],[1,4],[6,4]],[[6,5],[1,2],[4,6],[3,6]],[[1,4],[6,3],[5,1],[2,1]],[[2,4],[5,3],[1,2],[6,2]],[[5,4],[2,3],[6,5],[1,5]],[[6,4],[1,3],[2,6],[5,6]],[[1,3],[6,4],[2,1],[5,1]],[[2,3],[5,4],[6,2],[1,2]],[[5,3],[2,4],[1,5],[6,5]],[[6,3],[1,4],[5,6],[2,6]],[[1,2],[6,5],[4,1],[3,1]],[[3,2],[4,5],[1,3],[6,3]],[[4,2],[3,5],[6,4],[1,4]],[[6,2],[1,5],[3,6],[4,6]],[[2,1],[5,6],[3,2],[4,2]],[[3,1],[4,6],[5,3],[2,3]],[[4,1],[3,6],[2,4],[5,4]],[[5,1],[2,6],[4,5],[3,5]]],[[[0,0,0],[[90,0,0],[-90,0,0],[0,90,0],[0,-90,0]]],[[0,0,90],[[90,0,90],[-90,0,90],[0,90,90],[0,-90,90]]],[[0,0,-90],[[90,0,-90],[-90,0,-90],[0,90,-90],[0,-90,-90]]],[[0,0,180],[[90,0,180],[-90,0,180],[0,90,180],[0,-90,180]]],[[90,180,0],[[180,180,0],[0,180,0],[90,180,90],[90,180,-90]]],[[0,90,90],[[90,90,90],[-90,90,90],[0,180,90],[0,0,90]]],[[0,-90,-90],[[90,-90,-90],[-90,-90,-90],[0,0,-90],[0,-180,-90]]],[[90,0,0],[[180,0,0],[0,0,0],[90,0,-90],[90,0,90]]],[[-90,0,-90],[[0,0,-90],[-180,0,-90],[-90,0,0],[-90,0,-180]]],[[0,-90,0],[[90,-90,0],[-90,-90,0],[0,0,0],[0,-180,0]]],[[0,90,180],[[90,90,180],[-90,90,180],[0,180,180],[0,0,180]]],[[90,0,90],[[180,0,90],[0,0,90],[90,0,0],[90,0,180]]],[[-90,0,90],[[0,0,90],[-180,0,90],[-90,0,180],[-90,0,0]]],[[0,90,0],[[90,90,0],[-90,90,0],[0,180,0],[0,0,0]]],[[0,-90,180],[[90,-90,180],[-90,-90,180],[0,0,180],[0,-180,180]]],[[90,0,-90],[[180,0,-90],[0,0,-90],[90,0,-180],[90,0,0]]],[[-90,0,0],[[0,0,0],[-180,0,0],[-90,0,90],[-90,0,-90]]],[[0,-90,90],[[90,-90,90],[-90,-90,90],[0,0,90],[0,-180,90]]],[[0,90,-90],[[90,90,-90],[-90,90,-90],[0,180,-90],[0,0,-90]]],[[90,0,180],[[180,0,180],[0,0,180],[90,0,90],[90,0,270]]],[[0,180,0],[[90,180,0],[-90,180,0],[0,270,0],[0,90,0]]],[[0,180,90],[[90,180,90],[-90,180,90],[0,270,90],[0,90,90]]],[[0,180,-90],[[90,180,-90],[-90,180,-90],[0,270,-90],[0,90,-90]]],[[180,0,0],[[270,0,0],[90,0,0],[180,-90,0],[180,90,0]]]]]; // the next position and orientation after each movement
+    
+    
+    var puzzles = [
+        [["gridsize",9,9], ["ab",1,1,9,8], ["starthow",2,1], ["vregs",[1,3],[1,6],[2,3],[2,6],[3,3],[3,6],[4,3],[4,6],[5,3],[5,6],[6,3],[6,6],[7,3],[7,6],[8,3],[8,6],[9,3],[9,6]], ["hregs",[3,1],[6,1],[3,2],[6,2],[3,3],[6,3],[3,4],[6,4],[3,5],[6,5],[3,6],[6,6],[3,7],[6,7],[3,8],[6,8],[3,9],[6,9]], ["arrows", [3,3,"sws"], [6,3,"ee"], [4,6,"ne"]], ["odds",[1,8,"#a00"],[3,4,"#7f7f7f"],[7,5,"#7f7f7f"],[6,2,"#5f5"],[5,5,"#7f7f7f"]],["evens",[2,6,"#7f7f7f"],[3,3,"#5f5"],[8,1,"#7f7f7f"],[9,7,"#7f7f7f"]], ["givens",[1,1,4],[2,9,4],[7,4,4],[8,3,7],[9,4,9],[5,7,1]]],
+        [["gridsize",9,9], ["startat",5,2], ["starthow",1,2], ["vregs",[1,3],[1,6],[2,3],[2,6],[3,3],[3,6],[4,3],[4,6],[5,3],[5,6],[6,3],[6,6],[7,3],[7,6],[8,3],[8,6],[9,3],[9,6]], ["hregs",[3,1],[6,1],[3,2],[6,2],[3,3],[6,3],[3,4],[6,4],[3,5],[6,5],[3,6],[6,6],[3,7],[6,7],[3,8],[6,8],[3,9],[6,9]]],
+        []
+                  ]; // if, for reasons even I cannot fathom, I decide to add more puzzles to this thing...
+    
+    
+    function showRules(event) {
+        var pane = ["rules","about"].indexOf(event.target.id.substr(2));
+        var thepanel = document.getElementsByClassName("menu-panel")[pane];
+        var thecontents = thepanel.firstElementChild;
+        if (thepanel.style.display == "none" && (!paneltransit[pane])) {
+            paneltransit[pane] = true;
+            thepanel.style.display = "block";
+            thecontents.style.display = "block";
+            setTimeout(function() {
+                thepanel.style.opacity = "1";
+                thepanel.style.height = "80em";
+                thecontents.style.opacity = "1";
+            }, 20);
+            setTimeout(function(){
+                paneltransit[pane] = false;
+            }, 353);
+        } else if (!paneltransit[pane]) {
+            paneltransit[pane] = true;
+            thepanel.style.opacity = "0";
+            thepanel.style.height = "10em";
+            thecontents.style.opacity = "1";
+            setTimeout(function(){
+                thepanel.style.display = "none";
+                thecontents.style.display = "none";
+                paneltransit[pane] = false;
+            }, 333);
+        }
+    }
+    
+    
+    function changeTab(tab, override) {
+        if (tab != currenttab && ((keysheld.indexOf(16) == -1 && keysheld.indexOf(17) == -1) || override)) {
+            document.getElementById("tab_" + currenttab).classList.remove("curtab");
+            document.getElementById("tab_" + currenttab).classList.add("noncur");
+            document.getElementById("tab_" + tab).classList.remove("noncur");
+            document.getElementById("tab_" + tab).classList.add("curtab");
+            currenttab = tab;
+            Array.prototype.slice.call(document.getElementsByClassName("padnum")).forEach(function(btn, ix) {
+                if (tab != "colour" && btn.classList.contains("colourtab")) {
+                    btn.classList.remove("colourtab");
+                }
+                switch (tab) {
+                    case "number":
+                        btn.innerHTML = '<svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">' + (ix + 1) + '</text></svg>';
+                        break;
+                    case "centre":
+                        btn.innerHTML = '<svg height="100%" width="100%"><text x="1.55em" y="2.2em" font-size="2.2em" font-weight="bold" fill="#fff">' + (ix + 1) + '</text></svg>';
+                        break;
+                    case "corner":
+                        btn.innerHTML = '<svg height="100%" width="100%"><text x="' + [0.2,1.55,2.9][ix % 3] + 'em" y="' + [1,2.2,3.4][(ix / 3) | 0] + 'em" font-size="2.2em" font-weight="bold" fill="#fff">' + (ix + 1) + '</text></svg>';
+                        break;
+                    case "colour":
+                        if (!btn.classList.contains("colourtab")) { // it should never already have the colourtab class at this point in the code, but just in case...
+                            btn.classList.add("colourtab");
+                        }
+                        btn.innerHTML = "";
+                        break;
+                }
+            });
+        }
+    }
+    
+    function rsDice() {
+        if (!diceinmotion) {
+            var slider = document.getElementById("theslider");
+            d_coords = started.slice(0,2);
+            dicefacing = started.slice(2);
+            slider.style.top = (d_coords[0] * 10) + "em";
+            slider.style.left = (d_coords[1] * 10) + "em";
+            var cube = document.getElementById("thecube");
+            var howto = turntable[1][["12", "13", "14", "15", "21", "23", "24", "26", "31", "32", "35", "36", "41", "42", "45", "46", "51", "53", "54", "56", "62", "63", "64", "65"].indexOf(dicefacing.join(""))][0];
+            cube.style.webkitTransform = "rotateX(" + howto[0] + "deg) rotateY(" + howto[1] + "deg) rotateZ(" + howto[2] + "deg)";
+            cube.style.transform = "rotateX(" + howto[0] + "deg) rotateY(" + howto[1] + "deg) rotateZ(" + howto[2] + "deg)";
+        }
+    }
+    
+    function moveDice(direction) {
+        if (diceinmotion == false && [d_coords[0], gridsize[0] - d_coords[0], gridsize[1] - d_coords[1], d_coords[1]]["nsew".indexOf(direction)] > 0) {
+            diceinmotion = true;
+            if (keysheld.indexOf(74) == -1) {
+                slideTheDice(direction);
+            }
+            if (keysheld.indexOf(75) == -1) {
+                turnTheDice(direction);
+            }
+            setTimeout(function() {
+                diceinmotion = false;
+                if (keysheld.length) {
+                    for (var ix = 0; ix < keysheld.length; ix++) {
+                        var vl = [87, 83, 68, 65].indexOf(keysheld[ix]);
+                        if (vl != -1) {
+                            moveDice("nsew"[vl]);
+                            return;
+                        }
+                    }
+                }
+            }, 340);
+        }
+    }
+    
+    function slideTheDice(direction) {
+        var slider = document.getElementById("theslider");
+        switch (direction) {
+            case "n":
+                d_coords[0]--;
+                break;
+            case "s":
+                d_coords[0]++;
+                break;
+            case "e":
+                d_coords[1]++;
+                break;
+            case "w":
+                d_coords[1]--;
+                break;
+        }
+        slider.style.webkitTransition = "all 0.31s ease-in";
+        slider.style.transition = "all 0.31s ease-in";
+        setTimeout(function() {
+            slider.style.top = (d_coords[0] * 10) + "em";
+            slider.style.left = (d_coords[1] * 10) + "em";
+        }, 20);
+        setTimeout(function() {
+            slider.style.webkitTransition = "none";
+            slider.style.transition = "none";
+        }, 333);
+    }
+    
+    function turnTheDice(direction) {
+        var slider = document.getElementById("theslider");
+        var cube = document.getElementById("thecube");
+        var dest = ["12", "13", "14", "15", "21", "23", "24", "26", "31", "32", "35", "36", "41", "42", "45", "46", "51", "53", "54", "56", "62", "63", "64", "65"].indexOf(dicefacing.join("")); // why, oh why, did JavaScript not have a built-in way to test if two different arrays are identical until 2015...
+        var coord = turntable[1][dest][0];
+        cube.style.webkitTransition = "none";
+        cube.style.transition = "none";
+        cube.style.webkitTransform = "rotateX(" + coord[0] + "deg) rotateY(" + coord[1] + "deg) rotateZ(" + coord[2] + "deg)";
+        cube.style.transform = "rotateX(" + coord[0] + "deg) rotateY(" + coord[1] + "deg) rotateZ(" + coord[2] + "deg)";
+        coord = turntable[1][dest][1]["nsew".indexOf(direction)]; // see previous complaint
+        dicefacing = turntable[0][dest]["nsew".indexOf(direction)];
+        setTimeout(function() {
+            cube.style.webkitTransition = "all 0.31s ease-in";
+            cube.style.transition = "all 0.31s ease-in";
+            cube.style.webkitTransform = "rotateX(" + coord[0] + "deg) rotateY(" + coord[1] + "deg) rotateZ(" + coord[2] + "deg)";
+            cube.style.transform = "rotateX(" + coord[0] + "deg) rotateY(" + coord[1] + "deg) rotateZ(" + coord[2] + "deg)";
+            slider.style.webkitAnimation = "raisedice 0.31s ease-in";
+            slider.style.animation = "raisedice 0.31s ease-in";
+        }, 20);
+        setTimeout(function() {
+            slider.style.webkitAnimation = "none";
+            slider.style.animation = "none";
+            cube.style.webkitTransition = "none";
+            cube.style.transition = "none";
+        }, 333);
+    }
+    
+    
+    function updateCells(num, thecells, thetab) {
+        var didwhat = []; // what to push into the undo history
+        if (thetab == "colour") {
+            var colour = ["#fff","#0a0","#f55","#aaa","#a50","#0aa","#fa5","#5ff","#a0a","#00a"][num]; // other colors: #000 (given digits), #55f (player-placed digits, selected cells), #a00 (not on dice path), #5f5 (on dice path)
+            didwhat = ["colour", num, []];
+            thecells.forEach(function(cell) {
+                var highlight = document.getElementById(cell).style.backgroundColor;
+                if (highlight[0] == "r") {
+                    highlight = "#" + highlight.match(/\d+/g).map(function(val) { return (parseInt(val,10) & 15).toString(16) }).join("");
+                }
+                if (highlight != colour) {
+                    didwhat[2].push([cell, ["#fff","#0a0","#f55","#aaa","#a50","#0aa","#fa5","#5ff","#a0a","#00a"].indexOf(highlight)]);
+                    document.getElementById(cell).style.backgroundColor = colour;
+                }
+            });
+            return didwhat;
+        }
+        thecells = thecells.filter(function(cell) { return givendigits.indexOf(cell) == -1; }); // to ensure that given digits are not affected
+        if (thetab == "centre") {
+            didwhat = ["centre", num, thecells.filter(function(cell) { return document.getElementById("n_" + cell[1] + "_" + cell[3]).style.fontSize != "7.7em"; })];
+            didwhat[2].forEach(function(cell) {
+                cellnums.centres[cell[1] - 1][cell[3] - 1][num] = (cellnums.centres[cell[1] - 1][cell[3] - 1][num] == num ? "" : num);
+            });
+        } else if (thetab == "corner") {
+            didwhat = ["corner", num, thecells.filter(function(cell) { return document.getElementById("n_" + cell[1] + "_" + cell[3]).style.fontSize != "7.7em"; })];
+            didwhat[2].forEach(function(cell) {
+                cellnums.corners[cell[1] - 1][cell[3] - 1][num] = (cellnums.corners[cell[1] - 1][cell[3] - 1][num] == num ? " " : num);
+            });
+        } else {
+            didwhat = ["place", num, [], []];
+            thecells.forEach(function(cell) {
+                var toplace = document.getElementById("n_" + cell[1] + "_" + cell[3]);
+                if (toplace.style.fontSize != "7.7em" || toplace.innerHTML != num) {
+                    didwhat[2].push(cell);
+                    didwhat[3].push(toplace.style.fontSize == "7.7em");
+                    if (toplace.style.fontSize != "7.7em") {
+                        toplace.style.fontSize = "7.7em";
+                        toplace.style.lineHeight = "1.05em";
+                        toplace.style.fontWeight = "normal";
+                        didwhat[3].push([cellnums.centres[cell[1] - 1][cell[3] - 1].slice(0), cellnums.corners[cell[1] - 1][cell[3] - 1].slice(0)]);
+                    } else {
+                        didwhat[3].push(toplace.innerHTML);
+                    }
+                    toplace.innerHTML = num;
+                }
+            });
+            return didwhat;
+        }
+        thecells.forEach(function(cell) {
+            if (document.getElementById("n_" + cell[1] + "_" + cell[3]).style.fontSize != "7.7em") {
+                renderCandidates(cell);
+            }
+        });
+        return didwhat;
+    }
+    
+    
+    function delNums(thecells, thetab) {
+        if (thetab == "colour") {
+            return updateCells(0, thecells, thetab);
+        }
+        var didwhat = ["del", []];
+        if (thetab == "centre") {
+            thecells = thecells.filter(function(cell) { return givendigits.indexOf(cell) == -1; });
+            thecells.forEach(function(cell) {
+                var centre = cellnums.centres[cell[1] - 1][cell[3] - 1];
+                if (centre.join("").length) {
+                    didwhat[1].push([cell, "centre", centre.slice(0)]);
+                    cellnums.centres[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
+                    renderCandidates(cell);
+                }
+            });
+        } else if (thetab == "corner") {
+            thecells = thecells.filter(function(cell) { return givendigits.indexOf(cell) == -1; });
+            thecells.forEach(function(cell) {
+                var corner = cellnums.corners[cell[1] - 1][cell[3] - 1];
+                if (corner.join("") != "          ") {
+                    didwhat[1].push([cell, "corner", corner.slice(0)]);
+                    cellnums.corners[cell[1] - 1][cell[3] - 1] = [" "," "," "," "," "," "," "," "," "," "];
+                    renderCandidates(cell);
+                }
+            });
+        } else {
+            thecells.forEach(function(cell) {
+                var todel = document.getElementById("n_" + cell[1] + "_" + cell[3]);
+                var corner = cellnums.corners[cell[1] - 1][cell[3] - 1];
+                var centre = cellnums.centres[cell[1] - 1][cell[3] - 1];
+                if (todel.style.fontSize == "7.7em") {
+                    if (givendigits.indexOf(cell) == -1) {
+                        didwhat[1].push([cell, "place", todel.innerHTML]);
+                        todel.style.fontSize = "1.5em";
+                        todel.style.lineHeight= "1.25em";
+                        todel.style.fontWeight = "bold";
+                        todel.innerHTML = "";
+                    }
+                } else if (centre.join("").length || (corner.join("") != "          ")) {
+                    didwhat[1].push([cell, "candidates", centre.slice(0), corner.slice(0)]);
+                    cellnums.corners[cell[1] - 1][cell[3] - 1] = [" "," "," "," "," "," "," "," "," "," "];
+                    cellnums.centres[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
+                    todel.innerHTML = "";
+                } else if (document.getElementById(cell).style.backgroundColor != "#fff") {
+                    didwhat[1].push([cell, "colour", document.getElementById(cell).style.backgroundColor]);
+                    document.getElementById(cell).style.backgroundColor = "#fff";
+                }
+            });
+        }
+        return didwhat;
+    }
+    
+    
+    function reDo() {
+        if (undoptr) {
+            var whattodo = undohistory[--undoptr];
+            switch (whattodo[0]) {
+                case "del":
+                    whattodo[1].forEach(function(dt) {
+                        delNums([dt[0]], dt[1]);
+                    });
+                    break;
+                case "colour":
+                    updateCells(whattodo[1], whattodo[2].map(function(cell){ return cell[0]; }), "colour");
+                    break;
+                case "centre":
+                case "corner":
+                case "place":
+                    updateCells(whattodo[1], whattodo[2], whattodo[0]);
+                    break;
+            }
+        }
+    }
+    
+    
+    function unDo() {
+        if (undoptr < undohistory.length) {
+            var whattodo = undohistory[undoptr++];
+            switch (whattodo[0]) {
+                case "colour":
+                    whattodo[2].forEach(function(cel) {
+                        updateCells(cel[1], [cel[0]], "colour");
+                    });
+                    break;
+                case "centre":
+                case "corner":
+                    whattodo[2].forEach(function(cell){
+                        updateCells(whattodo[1], [cell], whattodo[0]);
+                    });
+                    break;
+                case "place":
+                    whattodo[2].forEach(function(cell, ix) {
+                        var nums = document.getElementById("n_" + cell[1] + "_" + cell[3]);
+                        if (whattodo[3][ix * 2]) {
+                            nums.innerHTML = whattodo[3][(ix * 2) + 1];
+                        } else {
+                            cellnums.centres[cell[1] - 1][cell[3] - 1] = whattodo[3][(ix * 2) + 1][0].slice(0);
+                            cellnums.corners[cell[1] - 1][cell[3] - 1] = whattodo[3][(ix * 2) + 1][1].slice(0);
+                            nums.style.fontSize = "1.5em";
+                            nums.style.lineHeight= "1.25em";
+                            renderCandidates(cell);
+                        }
+                    });
+                    break;
+                case "del":
+                    whattodo[1].forEach(function(dt) {
+                        var cell = dt.shift();
+                        switch (dt[0]) {
+                            case "centre":
+                            case "corner":
+                                cellnums[dt[0] + "s"][cell[1] - 1][cell[3] - 1] = dt[1].slice(0);
+                                renderCandidates(cell);
+                                break;
+                            case "candidates":
+                                cellnums.centres[cell[1] - 1][cell[3] - 1] = dt[1].slice(0);
+                                cellnums.corners[cell[1] - 1][cell[3] - 1] = dt[2].slice(0);
+                                renderCandidates(cell);
+                                break;
+                            case "colour":
+                                document.getElementById(cell).style.backgroundColor = dt[1];
+                                break;
+                            case "place":
+                                var toplace = document.getElementById("n_" + cell[1] + "_" + cell[3]);
+                                toplace.style.fontSize = "7.7em";
+                                toplace.style.lineHeight = "1.05em";
+                                toplace.style.fontWeight = "normal";
+                                toplace.innerHTML = dt[1];
+                                break;
+                        }
+                    });
+                    break;
+            }
+        }
+    }
+    
+    function mademove(didwhat) {
+        var movtype = 0;
+        switch (didwhat[0]) {
+            case "del":
+                movtype = 1;
+                break;
+            case "place":
+            case "colour":
+            case "centre":
+            case "corner":
+                movtype = 2;
+                break;
+        }
+        if (didwhat[movtype].length) {
+            if (undoptr) {
+                undohistory = undohistory.slice(undoptr);
+                undoptr = 0;
+            }
+            if (undohistory.unshift(didwhat) > 9999) {
+                undohistory.pop();
+            }
+        }
+    }
+    
+    function renderCandidates(cell) {
+        var nums = document.getElementById("n_" + cell[1] + "_" + cell[3]);
+        var corner = cellnums.corners[cell[1] - 1][cell[3] - 1];
+        nums.style.fontWeight = "bold";
+        nums.innerHTML = [corner[0],"  ",corner[1],"  ",corner[2],"<br>",corner[3],"        ",corner[4],"<br>",cellnums.centres[cell[1] - 1][cell[3] - 1].join(""),"<br>",corner[5],"        ",corner[6],"<br>",corner[7],"  ",corner[8],"  ",corner[9]].join("");
+    }
+    
+    
+    function arrowSelect(direction) {
+        if (selectedcells.indexOf("r" + sel_ptr[0] + "c" + sel_ptr[1]) != -1) {
+            console.log(sel_ptr, gridsize);
+            sel_ptr[0] += direction[0];
+            if (sel_ptr[0] < 1 || sel_ptr[0] > (gridsize[0] + 1)) {
+                sel_ptr[0] -= direction[0];
+            }
+            sel_ptr[1] += direction[1];
+            if (sel_ptr[1] < 1 || sel_ptr[1] > (gridsize[1] + 1)) {
+                sel_ptr[1] -= direction[1];
+            }
+        }
+        if (keysheld.indexOf(16) == -1 && keysheld.indexOf(17) == -1) {
+            selectedcells.slice(0).forEach(function(cell) {
+                selcell(cell);
+            });
+        }
+        if (selectedcells.indexOf("r" + sel_ptr[0] + "c" + sel_ptr[1]) == -1) {
+            selcell("r" + sel_ptr[0] + "c" + sel_ptr[1]);
+        }
+        // There's probably a more elegant way to do this, but oh well
+    }
+    
+    
+    window.onkeydown = function(event) {
+        var key = event.which || event.keyCode;
+        if ([48,61,82,107,109,173].indexOf(key) == -1 || keysheld.indexOf(17) == -1) {
+            event.preventDefault();
+        } else {
+            return;
+        }
+        var direction = null;
+        switch (key) {
+            case 87:
+                direction = "n";
+                break;
+            case 83:
+                direction = "s";
+                break;
+            case 68:
+                direction = "e";
+                break;
+            case 65:
+                if (keysheld.indexOf(17) != -1) { // select all if ctrl is held, or deselect all if ctrl+shift is held
+                    Array.prototype.slice.call(document.getElementsByClassName("maze-cell")).forEach(function(cell) {
+                        if ((keysheld.indexOf(16) != -1) ^ (selectedcells.indexOf(cell.id) == -1)) {
+                            selcell(cell);
+                        }
+                    });
+                    return;
+                } else {
+                    direction = "w";
+                }
+                break;
+            case 37: // ←
+            case 38: // ↑
+            case 39: // →
+            case 40: // ↓
+                arrowSelect([[0,-1],[-1,0],[0,1],[1,0]][key - 37]);
+                break;
+            case 97:
+            case 98:
+            case 99:
+            case 100:
+            case 101:
+            case 102:
+            case 103:
+            case 104:
+            case 105: // 1-9 (numpad)
+                key -= 48;
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+            case 56:
+            case 57: // 1-9
+                mademove(updateCells(key - 48, selectedcells.slice(0), currenttab, false));
+                break;
+            case 8:
+            case 46: // backspace/delete
+                mademove(delNums(selectedcells.slice(0), currenttab, false));
+                break;
+            case 16: // shift
+                if (keysheld.indexOf(17) == -1) {
+                    changeTab("corner", true);
+                } else {
+                    changeTab("colour", true);
+                }
+                break;
+            case 17: // ctrl
+                if (keysheld.indexOf(16) == -1) {
+                    changeTab("centre", true);
+                } else {
+                    changeTab("colour", true);
+                }
+                break;
+            case 90: // z
+                if (keysheld.indexOf(17) != -1) {
+                    unDo();
+                } else {
+                    deftab = "number";
+                    changeTab("number", false);
+                }
+                break;
+            case 82: // r
+                rsDice();
+                break;
+            case 67: // c
+            case 86: // v
+            case 88: // x
+                deftab = ["centre","colour","corner"][[67,86,88].indexOf(key)];
+                changeTab(["centre","colour","corner"][[67,86,88].indexOf(key)], false);
+                break;
+            case 89: // y
+                if (keysheld.indexOf(17) != -1) {
+                    reDo();
+                }
+                break;
+            case 74: // j
+            case 75: // k
+                break;
+            default:
+                return;
+        }
+        if (keysheld.indexOf(key) == -1) {
+            keysheld.unshift(key);
+        }
+        if (direction) {
+            moveDice(direction);
+        }
+    };
+    
+    window.onkeyup = function(event) {
+        var key = event.which || event.keyCode;
+        switch (key) {
+            case 16:
+                if (keysheld.indexOf(17) != -1) {
+                    changeTab("centre", true);
+                } else {
+                    changeTab(deftab, true);
+                }
+                break;
+            case 17:
+                if (keysheld.indexOf(16) != -1) {
+                    changeTab("corner", true);
+                } else {
+                    changeTab(deftab, true);
+                }
+                break;
+        }
+        key = keysheld.indexOf(key);
+        if (key != -1) {
+            keysheld.splice(key, 1);
+        }
+    }
+    
+    document.addEventListener("mousedown", function(e) {
+        var targetEl = e.target; // clicked element
+        if (targetEl.classList.contains("maze-cell")) {
+            if (!mousestatus[2]) {
+                if (selectedcells.length == 1 && targetEl.id == selectedcells[0]) {
+                    mousestatus[2] = "deselecting";
+                } else if (selectedcells.length) {
+                    if (keysheld.indexOf(16) == -1 && keysheld.indexOf(17) == -1) {
+                        while (selectedcells.length) {
+                            selcell(document.getElementById(selectedcells[0]));
+                        }
+                        mousestatus[2] = "selecting";
+                    } else if (selectedcells.indexOf(targetEl.id) == -1) {
+                        mousestatus[2] = "selecting";
+                    } else {
+                        mousestatus[2] = "deselecting";
+                    }
+                } else {
+                    mousestatus[2] = "selecting";
+                }
+                selcell(targetEl);
+                sel_ptr = [parseInt(targetEl.id[1], 10), parseInt(targetEl.id[3], 10)];
+            }
+        } else {
+            do {
+                if (["mazeholder", "padholder", "tiltholder"].indexOf(targetEl.id) != -1) {
+                    return;
+                }
+                targetEl = targetEl.parentNode;
+            } while (targetEl);
+            if (!(turningback || mousestatus[2] == "tilting")) {
+                mousestatus = [e.clientX, e.clientY, "tilting"];
+                nottilted = true;
+                gridrotation = [0,0];
+            } else if (mousestatus[2] == "tilting") {
+                noTilt();
+            }
+        }
+    });
+    
+    document.addEventListener("blur", function(e) {
+        keysheld = [];
+        if (mousestatus[2] == "tilting") {
+            noTilt();
+        }
+        mousestatus[2] = null;
+    });
+    
+    document.addEventListener("mouseup", function(e) {
+        if (mousestatus[2] == "tilting") {
+            if (nottilted) {
+                Array.prototype.slice.call(document.getElementsByClassName("maze-cell")).forEach(function(cell) {
+                    if (selectedcells.indexOf(cell.id) != -1) {
+                        selcell(cell);
+                    }
+                });
+            } else {
+                noTilt();
+            }
+        }
+        mousestatus[2] = null;
+    });
+    
+    document.addEventListener("mousemove", function(e) {
+        var tgt = e.target;
+        if (mousestatus[2] == "tilting") {
+            nottilted = false;
+            tiltTheGrid([e.clientX, e.clientY]);
+        } else if (["selecting", "deselecting"].indexOf(mousestatus[2]) != -1 && tgt.classList.contains("maze-cell") && ((mousestatus[2] == "selecting") ^ (selectedcells.indexOf(tgt.id) != -1))) { // yes, XOR can be used in conditional evaluation.
+            selcell(tgt);
+            sel_ptr = [parseInt(tgt.id[1], 10), parseInt(tgt.id[3], 10)];
+        }
+    });
+    
+    function selcell(cell) {
+        if (typeof cell == "string") {
+            cell = document.getElementById(cell);
+        }
+        var ix = selectedcells.indexOf(cell.id);
+        if (ix == -1) {
+            cell.style.outline = "1em solid rgba(85,85,255,0.5)";
+            cell.style.outlineOffset = "-1em";
+            selectedcells.push(cell.id);
+        } else {
+            cell.style.outline = "none";
+            cell.style.outlineOffset = "none";
+            selectedcells.splice(ix, 1);
+        }
+    }
+    
+    function noTilt() {
+        var thegrid = document.getElementById("mazegrid");
+        mousestatus[2] = null;
+        turningback = true;
+        thegrid.style.webkitTransition = "all 0.33s ease-in-out";
+        thegrid.style.transition = "all 0.33s ease-in-out";
+        thegrid.style.webkitTransform = "none";
+        thegrid.style.transform = "none";
+        setTimeout(function() {
+            turningback = false;
+            thegrid.style.webkitTransition = "none";
+            thegrid.style.transition = "none";
+        }, 333);
+    }
+
+    function tiltTheGrid(exy) {
+        if (mousestatus[2] == "tilting") {
+            if ((exy[0] < mousestatus[0]) && (gridrotation[0] > -45)) {
+                gridrotation[0]--;
+            } else if ((exy[0] > mousestatus[0]) && (gridrotation[0] < 45)) {
+                gridrotation[0]++;
+            }
+            if ((exy[1] < mousestatus[1]) && (gridrotation[1] < 45)) {
+                gridrotation[1]++;
+            } else if ((exy[1] > mousestatus[1]) && (gridrotation[1] > -45)) {
+                gridrotation[1]--;
+            }
+            mousestatus[0] = exy[0];
+            mousestatus[1] = exy[1];
+            document.getElementById("mazegrid").style.webkitTransform = "rotateX(" + gridrotation[1] + "deg) rotateY(" + gridrotation[0] + "deg)";
+            document.getElementById("mazegrid").style.transform = "rotateX(" + gridrotation[1] + "deg) rotateY(" + gridrotation[0] + "deg)";
+        }
+    }
+    
+    function reSizing() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        var view = Math.min(w, h);
+        if ((h > w) && (screenorientation == "h")) {
+            screenorientation = "w";
+            var controls = document.getElementById("controlpanel");
+            var padh = document.getElementById("padholder");
+            var tilth = document.getElementById("tiltholder");
+            controls.style.height = "auto";
+            controls.style.width = ((gridsize[1] + 1) * 8) + "em";
+            controls.style.top = ((gridsize[0] + 3) * 10) + "em";
+            controls.style.left = "10em";
+            padh.style.top = "0em";
+            padh.style.left = "0em";
+            tilth.style.top = "0em";
+            tilth.style.left = "41.2em"
+        } else if ((h < w) && (screenorientation == "w")) {
+            screenorientation = "h";
+            var controls = document.getElementById("controlpanel");
+            var padh = document.getElementById("padholder");
+            var tilth = document.getElementById("tiltholder");
+            controls.style.height = ((gridsize[0] + 1) * 8) + "em";
+            controls.style.width = "auto";
+            controls.style.top = "10em";
+            controls.style.left = ((gridsize[0] + 3) * 10) + "em";
+            padh.style.top = "0em";
+            padh.style.left = "0em";
+            tilth.style.top = "58em";
+            tilth.style.left = "0.8em";
+        }
+    }
+    
+    function setUp() {
+        var controls = document.getElementById("controlpanel");
+        var holder = document.getElementById("mazeholder");
+        var slider = document.getElementById("theslider");
+        var grid = document.getElementById("mazegrid");
+        var cube = document.getElementById("thecube");
+        var thedecor = document.getElementById("decor");
+        var puzzle = puzzles[0]; // subject to change
+        puzzle.forEach(function(deco) {
+            var pos = deco.shift(); // the puzzle metadata should be in (roughly?) the same order every time, but just in case...
+            switch (pos) {
+                case "gridsize": // must come first, everything else can be in any order
+                    gridsize = [deco[0] - 1, deco[1] - 1];
+                    holder.style.height = (deco[0] * 10) + "em";
+                    holder.style.width = (deco[1] * 10) + "em";
+                    controls.style.height = (deco[0] * 8) + "em";
+                    controls.style.left = ((deco[1] + 2) * 10) + "em";
+                    for (var row = 0; row < deco[0]; row++) {
+                        cellnums.corners.push([]);
+                        cellnums.centres.push([]);
+                        for (var col = 0; col < deco[1]; col++) {
+                            cellnums.corners[row].push([" "," "," "," "," "," "," "," "," "," "]);
+                            cellnums.centres[row].push(["","","","","","","","","",""]);
+                            var cell = document.createElement("DIV");
+                            cell.classList.add("maze-cell");
+                            cell.id = "r" + (row + 1) + "c" + (col + 1);
+                            cell.style = "top:" + ((row * 10) - 0.1) + "em; left:" + (col * 10) + "em; background-color:#fff; border:0.05em solid #000;";
+                            grid.appendChild(cell);
+                            var numholder = document.createElement("DIV");
+                            var nums = document.createElement("DIV");
+                            numholder.classList.add("num-container");
+                            numholder.style = "top:" + ((row * 10) - 0.1) + "em; left:" + (col * 10) + "em;";
+                            nums.classList.add("cell-numbers");
+                            nums.id = "n_" + (row + 1) + "_" + (col + 1);
+                            numholder.appendChild(nums);
+                            grid.appendChild(numholder); // forgive me, Github, for I have sinned...
+                        }
+                    }
+                    break;
+                case "ab":
+                    d_coords = [deco[0] - 1, deco[1] - 1];
+                    started[0] = d_coords[0];
+                    started[1] = d_coords[1];
+                    slider.style.top = (d_coords[0] * 10) + "em";
+                    slider.style.left = (d_coords[1] * 10) + "em";
+                    thedecor.innerHTML += '<text x="' + (((d_coords[1] * 10) + 1) / 1.75).toString(10).substr(0,5) + 'em" y="' + (((d_coords[0] * 10) + 1.75) / 1.75).toString(10).substr(0,5) + 'em" style="font-size:1.75em;fill:#f5f;font-weight:bold">S T A R T</text>';
+                    thedecor.innerHTML += '<text x="' + (((deco[3] * 10) - 8.25) / 1.75).toString(10).substr(0,5) + 'em" y="' + (((deco[2] * 10) - 1) / 1.75).toString(10).substr(0,5) + 'em" style="font-size:1.75em;fill:#f5f;font-weight:bold">G O A L</text>';
+                    break;
+                case "starthow":
+                    dicefacing = [deco[0], deco[1]];
+                    started[2] = deco[0];
+                    started[3] = deco[1];
+                    var rstr = turntable[1][["12", "13", "14", "15", "21", "23", "24", "26", "31", "32", "35", "36", "41", "42", "45", "46", "51", "53", "54", "56", "62", "63", "64", "65"].indexOf(dicefacing.join(""))][0];
+                    cube.style.webkitTransform = "rotateX(" + rstr[0] + "deg) rotateY(" + rstr[1] + "deg) rotateZ(" + rstr[2] + "deg)";
+                    cube.style.transform = "rotateX(" + rstr[0] + "deg) rotateY(" + rstr[1] + "deg) rotateZ(" + rstr[2] + "deg)";
+                    break;
+                case "vregs":
+                case "hregs":
+                    deco.forEach(function(cor){
+                        cor.push("hv".indexOf(pos[0]));
+                        cor = [cor[0] - cor[2], cor[1] - (1 - cor[2]), cor[2]].map(function(num){ return (num * 10); });
+                        thedecor.innerHTML += '<line x1="' + cor[0] + 'em" y1="' + cor[1] + 'em" x2="' + (cor[0] + cor[2]) + 'em" y2="' + (cor[1] + 10 - cor[2]) + 'em" style="stroke:#000;stroke-width:0.5em;" />';
+                    });
+                    break;
+                case "arrows":
+                    deco.forEach(function(arrow) {
+                        var acoord = [(arrow[1] * 10) - 5, (arrow[0] * 10) - 5];
+                        thedecor.innerHTML += '<circle cx="' + acoord[0] + 'em" cy="' + acoord[1] + 'em" r="3.5em" stroke="#7f7f7f" stroke-width="0.75em" fill="transparent" />'; // at this point, if it works, I'll use it.
+                        arrow[2].split("").forEach(function(mov, ix) {
+                            var linstr = '<line x1="' + (ix ? acoord[0] : acoord[0] + [0,0,3.55,-3.55]["nsew".indexOf(mov)]) + 'em" y1="' + (ix ? acoord[1] : acoord[1] + [-3.55,3.55,0,0]["nsew".indexOf(mov)]) + 'em" x2="';
+                            switch (mov) {
+                                case "n":
+                                    acoord[1] -= 10;
+                                    break;
+                                case "s":
+                                    acoord[1] += 10;
+                                    break;
+                                case "e":
+                                    acoord[0] += 10;
+                                    break;
+                                case "w":
+                                    acoord[0] -= 10;
+                                    break;
+                            }
+                            thedecor.innerHTML += linstr + acoord[0] + 'em" y2="' + acoord[1] + 'em" stroke="#7f7f7f" stroke-width="0.75em" /> <circle cx="' + acoord[0] + 'em" cy="' + acoord[1] + 'em" r="0.375em" fill="#7f7f7f" />';
+                        });
+                        var headr = "nesw".indexOf(arrow[2][arrow[2].length - 1]);
+                        headr = [[[2.5,2.5],[-2.5,2.5],[-2.5,-2.5],[2.5,-2.5]][headr],[[2.5,2.5],[-2.5,2.5],[-2.5,-2.5],[2.5,-2.5]][(headr + 1) & 3]];
+                        thedecor.innerHTML += '<line x1="' + acoord[0] + 'em" y1="' + acoord[1] + 'em" x2="' + (acoord[0] + headr[0][0]) + 'em" y2="' + (acoord[1] + headr[0][1]) + 'em" style="stroke:#7f7f7f;stroke-width:0.75em;" /><line x1="' + acoord[0] + 'em" y1="' + acoord[1] + 'em" x2="' + (acoord[0] + headr[1][0]) + 'em" y2="' + (acoord[1] + headr[1][1]) + 'em" style="stroke:#7f7f7f;stroke-width:0.75em;" />';
+                    });
+                    break;
+                case "givens":
+                    givendigits = deco.map(function(cell) { return ("r" + cell[0] + "c" + cell[1]); });
+                    deco.forEach(function(given) {
+                        var toplace = document.getElementById("n_" + given[0] + "_" + given[1]);
+                        toplace.style.fontSize = "7.7em";
+                        toplace.style.lineHeight = "1.05em";
+                        toplace.style.fontWeight = "normal";
+                        toplace.style.color = "rgba(0,0,0,0.9)";
+                        toplace.innerHTML = given[2];
+                    });
+                    break;
+                case "odds":
+                case "evens":
+                    deco.forEach(function(shape) { // row, column, colour
+                        thedecor.innerHTML += (pos == "odds" ? ('<circle cx="' + ((shape[1] * 10) - 5) + 'em" cy="' + ((shape[0] * 10) - 5) + 'em" r="3.66em"') : ('<rect x="' + ((shape[1] * 10) - 8.3) + 'em" y="' + ((shape[0] * 10) - 8.3) + 'em" height="6.6em" width="6.6em"')) + 'style="opacity:0.75;fill:' + shape[2] + (shape[2] == "#7f7f7f" ? "" : ";stroke:" + ["#0a0","#f55"][["#5f5", "#a00"].indexOf(shape[2])] + ";stroke-width:0.33em") + ';" />';
+                    });
+                    break;
+            }
+        });
+        reSizing();
+        document.body.style.fontSize = (Math.min(window.innerWidth, window.innerHeight) * 0.0088) + "px"; // forgive me, github, for I have sinned
+    }
+    
+    setUp();
+    
+</script>
+
+</body>
