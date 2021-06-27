@@ -18,6 +18,16 @@
         -webkit-user-select: none;
     }
     
+    a {
+        color: #fff;
+    }
+    
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
     #mazeholder, #mazegrid, #thecube, #theslider {
         -webkit-transform-style: preserve-3d;
         transform-style: preserve-3d;
@@ -32,7 +42,6 @@
         background-color: #505;
         border-bottom: 0.5em solid #000;
         -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
     
@@ -59,7 +68,7 @@
         width: 100%;
         color: inherit;
         text-align: center;
-        top: 0.5em;
+        top: 0.6em;
         font-size: 2em;
         font-weight: bold;
         pointer-events: none;
@@ -80,15 +89,19 @@
     
     .panel-contents {
         position: absolute;
-        width: 95%;
+        width: 96%;
         height: 98%;
         opacity: 0;
         font-size: 2em;
-        overflow: scroll;
+        overflow-x: hidden;
+        overflow-y: scroll;
         color: #aff;
         -webkit-transition: all 0.33s ease-in-out;
         transition: all 0.33s ease-in-out;
     }
+    
+    .panel-contents>div, .panel-contents>p { margin-right: 1em; }
+    #about-panel>div, #about-panel>p { margin-left: 1em; }
     
     #padholder {
         display: block;
@@ -105,7 +118,7 @@
         height: 31.2em;
         background-color: #505;
         border-radius: 4em;
-        outline: 0.8em solid #aaa;
+        box-shadow: 0 0 0 0.8em #aaa;
     }
     
     #bleveler {
@@ -128,7 +141,6 @@
         border-radius: 0em 0em 4em 4em;
         z-index: 2;
         -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
     
@@ -142,25 +154,13 @@
         cursor: pointer;
     }
     
-    .paddice {
-        background-color: #05a;
-    }
+    .guibtn:hover { border: 0.4em solid #fff; }
     
-    .guibtn:hover {
-        border: 0.4em solid #fff;
-    }
+    .padnum:not(.colourtab) { background-color: #505; }
+    .padnum:not(.colourtab):hover { background-color: #50a; }
     
-    .padnum:not(.colourtab), .b_low {
-        background-color: #505;
-    }
-    
-    .padnum:not(.colourtab):hover, .b_low:hover {
-        background-color: #50a;
-    }
-    
-    .paddice:hover {
-        background-color: #55a;
-    }
+    .paddice { background-color: #05a; }
+    .paddice:hover { background-color: #55a; }
     
     .colourtab#num_1 { background-color: #0a0; }
     .colourtab#num_2 { background-color: #f55; }
@@ -172,9 +172,7 @@
     .colourtab#num_8 { background-color: #a0a; }
     .colourtab#num_9 { background-color: #00a; }
     
-    .b_low {
-        outline: 0.8em solid #aaa;
-    }
+    .b_low { box-shadow: 0 0 0 0.8em #aaa; }
     
     .tabbtn {
         position: absolute;
@@ -185,22 +183,17 @@
         border-width: 0.8em 0.8em 0em 0.8em;
         border-radius: 2em 2em 0em 0em;
         -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
     
-    .tabbtn>svg, .guibtn>svg, #mazegrid svg {
-        pointer-events:none;
-    }
+    .tabbtn>svg, .guibtn>svg, #mazegrid svg { pointer-events:none; }
     
     .noncur {
         z-index: 1;
         cursor: pointer;
     }
     
-    .noncur:hover {
-        background-color: #055;
-    }
+    .noncur:hover { background-color: #055; }
     
     .curtab {
         background-color: #05a;
@@ -241,15 +234,8 @@
     
     .cell-numbers {
         position: absolute;
-        color: #55f;
-        padding-top: 0.2em;
         width: 100%;
         height: 100%;
-        white-space: pre;
-        font-size: 1.5em;
-        line-height: 1.25em;
-        text-align: center;
-        font-family: "Lucida Console", monospace;
     }
     
     #thecube {
@@ -278,16 +264,18 @@
         z-index: 3;
     }
     
-    @-webkit-keyframes raisedice {
-        0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);}
-        50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);}
-        100% {-webkit-transform:translateZ(5.3em); transform:translateZ(5.3em);}
+    .icaption {
+        clear: both;
+        display: block;
+        text-align: center;
+        font-size: 0.75em;
+        color: #ff5;
     }
-    @keyframes raisedice {
-        0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);}
-        50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);}
-        100% {-webkit-transform:translateZ(5.3em);transform:translateZ(5.3em);}
-    }
+    
+    
+    @-moz-keyframes raisedice { 0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);} 50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);} 100% {-webkit-transform:translateZ(5.3em); transform:translateZ(5.3em);} }
+    @-webkit-keyframes raisedice { 0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);} 50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);} 100% {-webkit-transform:translateZ(5.3em); transform:translateZ(5.3em);} }
+    @keyframes raisedice { 0% {-webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);} 50% {-webkit-transform:translateZ(7.7em); transform:translateZ(7.7em);} 100% {-webkit-transform:translateZ(5.3em); transform:translateZ(5.3em);} }
     
     
 </style>
@@ -298,7 +286,7 @@
     <div id="mazeholder" style="position:absolute;top:12.5em;left:10em;perspective:125em;">
         <div id="mazegrid" style="border:0.66em solid black; border-radius:0.66em;">
             <svg id="decor" width="100%" height="100%"></svg>
-            <div id="theslider" style="width:10em; height:10em; -webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);">
+            <div id="theslider" style="width:10em; height:10em; visibility:visible; -webkit-transform:translateZ(5.2em); transform:translateZ(5.2em);">
                 <div id="thecube">
                     <div class="diceface" id="d_one" style="-webkit-transform:translateZ(5em); transform:translateZ(5em); background-color:rgba(255, 0, 0, 0.77); border:0.08em solid black;">
                         <svg width="100%" height="100%">
@@ -352,14 +340,14 @@
     <div id="controlpanel" style="position:absolute;top:12.5em;">
         <div id="padholder">
             <div id="bleveler"></div>
-            <div id="tab_number" class="tabbtn curtab" onclick="deftab='number';changeTab('number', false)">
+            <div id="tab_number" class="tabbtn curtab" title="Normal" onclick="deftab='number';changeTab('number', false)">
                 <svg height="100%" width="100%">
                     <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
                     <text x="0.55em" y="1.1em" font-size="4.4em" font-weight="bold" fill="#fff">1</text>
                     <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">z</text>
                 </svg>
             </div>
-            <div id="tab_corner" class="tabbtn noncur" style="left:8.033em;" onclick="deftab='corner';changeTab('corner', false)">
+            <div id="tab_corner" class="tabbtn noncur" title="Corner" style="left:8.033em;" onclick="deftab='corner';changeTab('corner', false)">
                 <svg height="100%" width="100%">
                     <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
                     <text x="0.82em" y="1.35em" font-size="1.75em" font-weight="bold" fill="#fff">1</text>
@@ -368,14 +356,14 @@
                     <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">x</text>
                 </svg>
             </div>
-            <div id="tab_centre" class="tabbtn noncur" style="left:16.066em;" onclick="deftab='centre';changeTab('centre', false)">
+            <div id="tab_centre" class="tabbtn noncur" title="Middle" style="left:16.066em;" onclick="deftab='centre';changeTab('centre', false)">
                 <svg height="100%" width="100%">
                     <rect x="1.1em" y="0.75em" height="5.2em" width="5.25em" rx="0.33em" ry="0.33em" stroke="#7f7f7f" stroke-width="0.25em" fill="transparent"/>
                     <text x="1.25em" y="2.25em" font-size="1.75em" font-weight="bold" fill="#fff">123</text>
                     <text x="3.36em" y="3.645em" font-size="1.5em" font-weight="bold" fill="#afa">c</text>
                 </svg>
             </div>
-            <div id="tab_colour" class="tabbtn noncur" style="left:24.1em;" onclick="deftab='colour';changeTab('colour', false)">
+            <div id="tab_colour" class="tabbtn noncur" title="Highlight" style="left:24.1em;" onclick="deftab='colour';changeTab('colour', false)">
                 <svg height="100%" width="100%">
                     <rect x="1.1em" y="0.75em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#0a0"/>
                     <rect x="2.85em" y="0.75em" height="1.73em" width="1.75em" rx="0.1em" ry="0.1em" fill="#f55"/>
@@ -418,86 +406,172 @@
                 <div class="guibtn padnum" id="num_9" style="top:22em;left:21.4em;" onclick="mademove(updateCells(9, selectedcells, currenttab))">
                     <svg height="100%" width="100%"><text x="0.5em" y="1.15em" font-size="5em" font-weight="bold" fill="#fff">9</text></svg>
                 </div>
-                <div class="guibtn b_low" style="top:33.5em;left:1.4em;" onclick="mademove(delNums(selectedcells, currenttab))">
+                <div class="guibtn padnum b_low" title="Delete" style="top:33.5em;left:1.4em;" onclick="mademove(delNums(selectedcells, currenttab))">
                     <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                         <polygon points="15,50 35,25 85,25 85,75 35,75" style="fill:transparent;stroke:#fff;stroke-width:8" />
                         <line x1="49" y1="42" x2="65" y2="58" style="stroke:#fff;stroke-width:8;stroke-linecap:round;" />
                         <line x1="65" y1="42" x2="49" y2="58" style="stroke:#fff;stroke-width:8;stroke-linecap:round;" />
-                        <text x="70" y="96" font-size="1.7em" font-weight="bold" fill="#aaf">del</text>
+                        <text x="70" y="96" font-size="15" font-weight="bold" fill="#aaf">del</text>
                     </svg>
                 </div>
-                <div class="guibtn b_low" id="undoer" style="top:33.5em;left:11.4em;" onclick="unDo()">
+                <div class="guibtn padnum b_low" id="undoer" title="Undo Number" style="top:33.5em;left:11.4em;" onclick="unDo()">
                     <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                         <path d="M77 60 Q77 35 52 35 Q27 35 27 60" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
                         <polyline points="41,54 28,67 15,54" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
-                        <text x="58" y="96" font-size="1.7em" font-weight="bold" fill="#aaf">ctrl-Z</text>
+                        <text x="56" y="96" font-size="15" font-weight="bold" fill="#aaf">ctrl-Z</text>
                     </svg>
                 </div>
-                <div class="guibtn b_low" id="redoer" style="top:33.5em;left:21.4em;" onclick="reDo()">
+                <div class="guibtn padnum b_low" id="redoer" title="Redo Number" style="top:33.5em;left:21.4em;" onclick="reDo()">
                     <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                         <path d="M77 60 Q77 35 52 35 Q27 35 27 60" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
                         <polyline points="63,54 76,67 89,54" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
-                        <text x="58" y="96" font-size="1.7em" font-weight="bold" fill="#aaf">ctrl-Y</text>
+                        <text x="56" y="96" font-size="15" font-weight="bold" fill="#aaf">ctrl-Y</text>
                     </svg>
                 </div>
             </div>
         </div>
         <div id="tiltholder">
-            <div class="guibtn paddice" id="mov_n" style="top:1.2em;left:11.2em;" onclick="moveDice('n')">
+            <div class="guibtn paddice" id="mov_n" style="top:1.2em;left:11.2em;" title="Move Dice" onclick="moveDice('n', false)">
                 <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                     <polygon points="40,80 60,80 60,50 80,50 50,20 20,50 40,50" style="fill:#fff" />
-                    <text x="77" y="94" font-size="2em" font-weight="bold" fill="#faa">W</text>
+                    <text x="77" y="94" font-size="17" font-weight="bold" fill="#faa">W</text>
                 </svg>
             </div>
-            <div class="guibtn paddice" id="mov_w" style="top:11.2em;left:1.2em;" onclick="moveDice('w')">
+            <div class="guibtn paddice" id="mov_w" style="top:11.2em;left:1.2em;" title="Move Dice" onclick="moveDice('w', false)">
                 <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                     <polygon points="80,40 80,60 50,60 50,80 20,50 50,20 50,40" style="fill:#fff" />
-                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">A</text>
+                    <text x="80" y="94" font-size="17" font-weight="bold" fill="#faa">A</text>
                 </svg>
             </div>
-            <div class="guibtn paddice" id="mov_e" style="top:11.2em;left:21.2em;" onclick="moveDice('e')">
+            <div class="guibtn paddice" id="mov_e" style="top:11.2em;left:21.2em;" title="Move Dice" onclick="moveDice('e', false)">
                 <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                     <polygon points="20,40 20,60 50,60 50,80 80,50 50,20 50,40" style="fill:#fff" />
-                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">D</text>
+                    <text x="80" y="94" font-size="17" font-weight="bold" fill="#faa">D</text>
                 </svg>
             </div>
-            <div class="guibtn paddice" id="mov_s" style="top:21.2em;left:11.2em;" onclick="moveDice('s')">
+            <div class="guibtn paddice" id="mov_s" style="top:21.2em;left:11.2em;" title="Move Dice" onclick="moveDice('s', false)">
                 <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                     <polygon points="40,20 60,20 60,50 80,50 50,80 20,50 40,50" style="fill:#fff" />
-                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">S</text>
+                    <text x="80" y="94" font-size="17" font-weight="bold" fill="#faa">S</text>
                 </svg>
             </div>
-            <div class="guibtn paddice" id="rs_d" style="height:7em;width:7em;top:11.7em;left:11.7em;" onclick="rsDice()">
+            <div class="guibtn paddice" id="showhider" title="Show/Hide Dice" style="height:6.6em;width:6.6em;top:21.9em;left:21.9em;" onclick="showHideD()">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <path d="M80 50 Q50 20 20 50 Q50 80 80 50" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <circle cx="50" cy="50" r="8.8" fill="#fff"/>
+                    <text x="80" y="94" font-size="18" font-weight="bold" fill="#faa">T</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="rs_d" title="Reset Dice" style="height:6.6em;width:6.6em;top:21.9em;left:1.9em;" onclick="rsDice()">
                 <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
                     <path d="M52 75 Q77 75 77 50 Q77 25 52 25 Q27 25 27 50" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
                     <polyline points="41,42 28,55 15,42" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
-                    <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">R</text>
+                    <text x="80" y="94" font-size="18" font-weight="bold" fill="#faa">R</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="ud_d" title="Undo Dice Move" style="height:6.6em;width:6.6em;top:1.9em;left:1.9em;" onclick="unreDice(true)">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <path d="M77 60 Q77 35 52 35 Q27 35 27 60" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <polyline points="41,54 28,67 15,54" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <text x="80" y="94" font-size="18" font-weight="bold" fill="#faa">J</text>
+                </svg>
+            </div>
+            <div class="guibtn paddice" id="rd_d" title="Redo Dice Move" style="height:6.6em;width:6.6em;top:1.9em;left:21.9em;" onclick="unreDice(false)">
+                <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+                    <path d="M77 60 Q77 35 52 35 Q27 35 27 60" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <polyline points="63,54 76,67 89,54" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" />
+                    <text x="80" y="94" font-size="18" font-weight="bold" fill="#faa">K</text>
                 </svg>
             </div>
         </div>
     </div>
     <div id="mainmenu">
         <div class="menubtn" id="m_rules" style="right:5em;" onclick="showRules(event)"><div>Rules</div></div>
+        <div class="menubtn" id="m_about" style="left:5em;" onclick="showRules(event)"><div>About</div></div>
     </div>
-    <div class="menu-panel" id="rules-panel" style="display:none;height:10em;width:40em;top:10em;right:1em;"><div class="panel-contents">
-        <div style="text-align:center;font-weight:bold;">RULES & CONTROLS</div>
-        <ol style="list-style-type:upper-roman">
-            <li>Normal sudoku rules apply (every row, column, and 3x3 box must contain all the digits 1 to 9 once each).</li>
-            <li>The finished grid contains a Dice Maze. <ol style="list-style-type:lower-alpha">
-                <li>The dice starts in r1c1 (the cell labeled "Start"), with a 2 on top and a 1 facing south. The dice must travel from there to r9c8 (the cell labeled "Goal").</li>
-                <li>The dice moves by rolling orthogonally (use WASD keys, or the labeled buttons on the side panel).</li>
-                <li>The dice can only move onto a cell that contains the same digit currently on top of the dice. <ul><li>For instance: if a 2 is on top of the dice, the next cell it moves onto must contain a 2. If a 6 is on top after that move, the next cell it moves to from there must contain a 6, and so on.</li></ul></li>
-                <li>The dice path can cross the same cell multiple times.</li>
-            </ol></li>
-            <li>Digits in arrows must sum to the digit in the circle.<ol style="list-style-type:lower-alpha">
-                <li>If the dice enters an arrow's circle, it must then travel along the entire length of that arrow from the circle to the arrowhead (it may exit the final arrow cell in any direction).</li>
-            </ol></li>
-            <li>Cells marked with a square are even, cells marked with a (solid) circle are odd.<ol style="list-style-type:lower-alpha">
-                <li>Cells with green shapes are on the dice path, cells with red shapes are not on the dice path. Gray shapes may be either.</li>
-            </ol></li>
-            <li>For more examples and clarifications, see "About" panel <i>(to be added, sorry about that!)</i></li>
-        </ol>
-    </div></div>
+    <div class="menu-panel" id="rules-panel" style="display:none;height:10%;width:40%;max-width:40em;top:10em;right:1em;">
+        <div class="panel-contents">
+            <div style="text-align:center;font-size:1.25em;font-weight:bold;color:#fff">THE RULES</div>
+            <ol style="list-style-type:upper-roman">
+                <li>Normal sudoku rules apply (every row, column, and 3x3 box must contain all the digits 1 to 9 once each).</li>
+                <li>The finished grid contains a Dice Maze. <ol style="list-style-type:lower-alpha">
+                    <li>The dice starts in r1c1 (the cell labeled "Start"), with a 2 on top and a 1 facing south. The dice must travel from there to r9c8 (the cell labeled "Goal").</li>
+                    <li>The dice moves by rolling orthogonally (use WASD keys, or the labeled buttons on the side panel).</li>
+                    <li>The dice can only move onto a cell that contains the same digit currently on top of the dice. <ul><li>For instance: if a 2 is on top of the dice, the next cell it moves onto must contain a 2. If a 6 is on top after that move, the next cell it moves to from there must contain a 6, and so on.</li></ul></li>
+                    <li>The dice path can cross the same cell multiple times.</li>
+                </ol></li>
+                <li>Digits in arrows must sum to the digit in the circle.<ol style="list-style-type:lower-alpha">
+                    <li>If the dice enters an arrow's circle, it must then travel along the entire length of that arrow from the circle to the arrowhead. <ul><li>For instance: if the dice enters r4c6, its next move must be to r3c6, and then r3c7.</li></ul></li>
+                </ol></li>
+                <li>Cells marked with a square are even, cells marked with a (solid) circle are odd.<ol style="list-style-type:lower-alpha">
+                    <li>Cells with green shapes are on the dice path, cells with red shapes are not on the dice path. Gray shapes may be either.</li>
+                </ol></li>
+            </ol>
+            <p>For more examples and clarifications, see "About" panel.</p>
+            <p>(bonus feature: hold down Q and E to, respectively, turn the dice in place without sliding it, or to slide it without turning it, this should help you move it around the board)</p>
+            <p>(you can also click and drag outside the grid to tilt the maze grid... in case you want to view all sides of the dice without moving it)</p>
+        </div>
+    </div>
+    <div class="menu-panel" id="about-panel" style="display:none;height:10%;width:66%;max-width:100em;top:10em;left:10em;">
+        <div class="panel-contents">
+            <br>
+            <div style="text-align:center;font-size:1.1em;font-weight:bold;color:#fff">dedicated to<br>
+            <span style="font-size:1.1em">ROBERT ABBOTT</span><br>
+            (1933 — 2018)<br></div>
+            <br>
+            <p>Robert Abbott was a game designer who created several card games and board games, but was perhaps best known for inventing a type of puzzle known as "Logic Mazes," or sometimes "Multi-State Mazes" (or just "mazes-with-rules"). These are, well, mazes with rules.</p>
+            <p>The first-ever logic maze, Abbott's "The Traffic Maze in Floyd's Knob" (see below) was originally published in 1962, in Martin Gardner's <i>Mathematical Games</i> column in <i>Scientific American</i>. After this, Abbott would go on to publish multiple books of logic mazes, including <i>Mad Mazes</i> and <i>SuperMazes</i>.</p>
+            <div>
+                <div style="width:17%;float:right;padding:1em;"><a href="img/mm1.jpg" target="_blank"><img src="img/mm1.jpg" width="80%" height="80%" alt='The maze "Pirates and Plunder" from "Mad Mazes" (illustrated by Lloyd Birmingham)' title='Sorry about the terrible camera quality by the way; my phone is garbage ^_^;'></a><span class="icaption">A maze from <i>Mad Mazes</i><br>(click to expand)</span></div><br>
+                <p>There are many different sub-types of logic maze, some resembling traditional pencil-and-paper mazes just with an added rule regarding movement, others resembling something else entirely.</p>
+                <p>One sub-type of logic maze that Abbott made a number of were dice mazes, or "Rolling Cube Mazes" as he sometimes called them. The standard form of these involved rolling a dice around a board of numbers, the numbers indicating which cell the dice could travel onto.</p>
+            </div>
+            <br>
+            <div>
+                <div style="width:25%;float:left;"><a href="img/sm1.jpg" target="_blank"><img src="img/sm1.jpg" width="80%" height="80%" alt='The maze "First Rolling-Cube Maze" from "SuperMazes"' title="I didn't know unions had hazing rituals..."></a><span class="icaption">a maze from <i>SuperMazes</i><br>(click to expand)</span></div>
+                <br><p>These often involved just one number per cell (though often with "wild" squares to shake things up), though there were many other variants on the same premise as well (see below). These grid layouts are what gave me the idea to apply some of these same concepts to a sudoku hybrid.</p><br>
+            </div>
+            <br>
+            <div>
+                <div style="width:17%;float:right;padding:1em;"><a href="img/smh.jpg" target="_blank"><img src="img/smh.jpg" width="80%" height="80%" alt='The solution to the "First Rolling-Cube Maze" and a tutorial for setting dice mazes, also from "SuperMazes"' title='SPOILER ALERT'></a><span class="icaption">The solution to the previous maze, and a tutorial on how to set your own (also from <i>SuperMazes</i>).</span></div>
+                <p>In fact, he even included a tutorial on how to set your own rolling-cube mazes, a bit reminiscent of the puzzle-setting video series on CTC.</p>
+                <p>Granted, this tutorial wasn't quite as useful in designing this Dice Maze Sudoku, since the numbers in most of the grid must be deduced, which changes the game considerably (also, half the fun of a logic maze is exploring and finding false paths through trial and error, which is far less fun in a sudoku than in a maze). Still, quite a few of the concepts are still useful (for instance, building the solution path first, as though you were solving a maze that didn't exist yet), and I did my best to replicate the feeling, if not the exact experience, of solving one of these mazes.</p>
+            </div>
+            <br>
+            <div>
+                <p>Of course, not all rolling-cube logic mazes follow the same formula of having one number per cell. Here are a few different variants with different dice-based gimmick.</p>
+                <div style="width:30%;display:inline-block;padding-left:1em;padding-right:1em;"><a href="img/mm2.jpg" target="_blank"><img src="img/mm2.jpg" width="40%" height="40%" alt='The maze "Damsel in Distress" from "Mad Mazes" (illustrated by Lloyd Birmingham)' title="Um..."></a><span class="icaption">a variant dice maze from <i>Mad Mazes</i></span></div>
+                <div style="width:25%;display:inline-block;padding-left:1em;padding-right:1em;"><a href="img/sm2.jpg" target="_blank"><img src="img/sm2.jpg" width="80%" height="80%" alt='The maze "Second Rolling-Cube Maze" from "SuperMazes"' title='Jeff really should find some other line of work'></a><span class="icaption">a variant from <i>SuperMazes</i></span></div>
+                <div style="width:30%;display:inline-block;padding-left:1em;padding-right:1em;"><a href="img/sm4.jpg" target="_blank"><img src="img/sm4.jpg" width="40%" height="40%" alt='The maze "Fourth Rolling-Cube Maze" from "SuperMazes"' title="I'm surprised he didn't tie this one into the ongoing lore."></a><span class="icaption">a sequel to the previous variant, also from <i>SuperMazes</i></span></div>
+            </div>
+            <br>
+            <br>
+            <p>Welp, now you know the inspirations behind this Dice Maze Sudoku. For more information about Robert Abbott, you could check out <a target="_blank" href="http://logicmazes.com/">his website</a> (still up as of June 2021), which also has <a target="_blank" href="http://logicmazes.com/games/index.htm">a handy list</a> of all the various games he designed other than logic mazes. I do have a bit more to drone on about regarding logic mazes, though:</p>
+            <br>
+            <div>
+                <p>Way back at the start of this page, I said I'd show you the first-ever logic maze, "Traffic Maze in Floyd's Knob." Abbott would later include a variant of the maze, with the same ruleset (and the same flavortext) but a different layout, in <i>Mad Mazes</i>. Here are both versions:</p>
+                <div style="width:30%;display:inline-block;padding-left:20%;padding-right:1em;"><a href="img/mazehistory.jpg" target="_blank"><img src="img/mazehistory.jpg" width="80%" height="80%" alt="The original 'Traffic Maze in Floyd's Knob' puzzle." title='For the story attached to it, see the next image.'></a><span class="icaption">The first-ever logic maze, as originally published, plus some context from the introduction of <i>SuperMazes</i>.</span></div>
+                <div style="width:30%;display:inline-block;padding-left:1em;padding-right:1em;"><a href="img/farmermarket.jpg" target="_blank"><img src="img/farmermarket.jpg" width="80%" height="80%" style="display:block;margin-left:auto;margin-right:auto;" alt='The maze "The Farmer Goes To Market" from "Mad Mazes" (illustrated by Lloyd Birmingham)' title="I kinda prefer the original but this one is still fun."></a><span class="icaption">The later version, from <i>Mad Mazes</i>.</span></div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <p>Number mazes, where the number you land on determines what distance you can travel on your next move, are another popular type of maze (I adapted the premise into "The Vizier's Tour," my entry for last month's puzzle prompt).</p>
+                <div style="width:30%;display:inline-block;padding-left:20%;padding-right:1em;"><a href="img/nummaze_mm.jpg" target="_blank"><img src="img/nummaze_mm.jpg" width="80%" height="80%" alt='The maze "Jumping Jim" from "Mad Mazes"  (illustrated by Lloyd Birmingham)' title='Wheeeee!'></a><span class="icaption">A number maze from <i>Mad Mazes</i>.</span></div>
+                <div style="width:30%;display:inline-block;padding-left:1em;padding-right:1em;"><a href="img/nummaze_sm.jpg" target="_blank"><img src="img/nummaze_sm.jpg" width="80%" height="80%" style="display:block;margin-left:auto;margin-right:auto;" alt='The maze "Number Maze" from "SuperMazes"' title="What, no cute little framing story about someone being in mortal peril? Weak."></a><span class="icaption">And one from <i>SuperMazes</i>.</span></div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <p>And here are some two-state mazes, which I'm including here solely because I've adapted them into <i>Mario Maker 2</i> levels, and want to shamelessly promote more of my own work.</p>
+                <div style="width:30%;display:inline-block;padding-left:20%;padding-right:1em;"><a href="img/mm0.jpg" target="_blank"><img src="img/mm0.jpg" width="80%" height="80%" alt='The maze "The Arctic Caves of Norway" from "Mad Mazes" (illustrated by Lloyd Birmingham)' title="Oh please, I live in Wisconsin, this weather is nothing."></a><span class="icaption">SMM2 level code: 38V-L0T-KWF.</span></div>
+                <div style="width:25%;display:inline-block;padding-left:1em;padding-right:1em;"><a href="img/mmrr.jpg" target="_blank"><img src="img/mmrr.jpg" width="80%" height="80%" alt='The maze "Road Rally" from "Mad Mazes" (illustrated by Lloyd Birmingham)' title="I actually had to nerf this maze a bit in my Mario Maker 2 level, since the fact that you can't see the whole maze at once when playing the level made this much more difficult."></a><span class="icaption">SMM2 level code: QKG-SDT-HYG</span></div>
+            </div>
+            <br>
+            <p>And if all of these mazes were way too easy for you and you want some puzzles that will really make your brain hurt, look up "Theseus and the Minotaur" and "Where Are The Cows." You're welcome!</p>
+            <p style="text-align:center;margin-left:10em;">— Nell Gwyn</p>
+        </div>
+    </div>
 
 <script>
     
@@ -508,8 +582,11 @@
         centres: []
     }; // tracking what numbers the user has put in each cell
     
-    var undohistory = []; // stores movements for undo/redo
-    var undoptr = 0; // where the pointer currently is
+    var rollhistory = []; // stores dice movements
+    var rollptr = 0; // where the dice stack currently is there
+    
+    var undohistory = []; // stores stack for number placements
+    var undoptr = 0; // where the undo/redo stack currently is
     
     var const_raints = [['<polygon points="40,20 60,20 60,40 80,40 80,60 60,60 60,80 40,80 40,60 20,60 20,40 40,40" />']]; // the various constraint tools, and SVGs for same
     
@@ -518,6 +595,8 @@
     var currenttab = "number"; // which tab is the current one
     var deftab = "number"; // which tab to return to when the shift and ctrl keys are released
     var keysheld = []; // whether the shift and/or ctrl keys are held
+    
+    var dfreeze = [false, false]; // whether the dice cannot slide or turn, respectively
     
     var sel_ptr = [1,1]; // the arrow-key-controlled selection pointer
     var started = [0,0,0,0]; // where the dice starts and where it's facing
@@ -547,7 +626,7 @@
     
     
     var puzzles = [
-        [["gridsize",9,9], ["ab",1,1,9,8], ["starthow",2,1], ["vregs",[1,3],[1,6],[2,3],[2,6],[3,3],[3,6],[4,3],[4,6],[5,3],[5,6],[6,3],[6,6],[7,3],[7,6],[8,3],[8,6],[9,3],[9,6]], ["hregs",[3,1],[6,1],[3,2],[6,2],[3,3],[6,3],[3,4],[6,4],[3,5],[6,5],[3,6],[6,6],[3,7],[6,7],[3,8],[6,8],[3,9],[6,9]], ["arrows", [3,3,"sws"], [6,3,"ee"], [4,6,"ne"]], ["odds",[1,8,"#a00"],[3,4,"#7f7f7f"],[7,5,"#7f7f7f"],[6,2,"#5f5"],[5,5,"#7f7f7f"]],["evens",[2,6,"#7f7f7f"],[3,3,"#5f5"],[8,1,"#7f7f7f"],[9,7,"#7f7f7f"]], ["givens",[1,1,4],[2,9,4],[7,4,4],[8,3,7],[9,4,9],[5,7,1]]],
+        [["gridsize",9,9], ["ab",1,1,9,8], ["starthow",2,1], ["vregs",[1,3],[1,6],[2,3],[2,6],[3,3],[3,6],[4,3],[4,6],[5,3],[5,6],[6,3],[6,6],[7,3],[7,6],[8,3],[8,6],[9,3],[9,6]], ["hregs",[3,1],[6,1],[3,2],[6,2],[3,3],[6,3],[3,4],[6,4],[3,5],[6,5],[3,6],[6,6],[3,7],[6,7],[3,8],[6,8],[3,9],[6,9]], ["arrows", [3,3,"sws"], [6,3,"ee"], [4,6,"ne"]], ["odds",[1,8,"#a00"],[3,4,"#7f7f7f"],[7,5,"#7f7f7f"],[6,2,"#5f5"],[5,5,"#7f7f7f"]],["evens",[2,6,"#7f7f7f"],[3,3,"#5f5"],[8,1,"#7f7f7f"],[9,7,"#7f7f7f"]], ["givens",[1,1,4],[2,9,4],[5,6,4],[8,3,7],[9,4,9],[5,7,1]]],
         [["gridsize",9,9], ["startat",5,2], ["starthow",1,2], ["vregs",[1,3],[1,6],[2,3],[2,6],[3,3],[3,6],[4,3],[4,6],[5,3],[5,6],[6,3],[6,6],[7,3],[7,6],[8,3],[8,6],[9,3],[9,6]], ["hregs",[3,1],[6,1],[3,2],[6,2],[3,3],[6,3],[3,4],[6,4],[3,5],[6,5],[3,6],[6,6],[3,7],[6,7],[3,8],[6,8],[3,9],[6,9]]],
         []
                   ]; // if, for reasons even I cannot fathom, I decide to add more puzzles to this thing...
@@ -555,7 +634,7 @@
     
     function showRules(event) {
         var pane = ["rules","about"].indexOf(event.target.id.substr(2));
-        var thepanel = document.getElementsByClassName("menu-panel")[pane];
+        var thepanel = document.getElementsByClassName("menu-panel")[pane]; // for some reason, getElementById fails if I construct it here
         var thecontents = thepanel.firstElementChild;
         if (thepanel.style.display == "none" && (!paneltransit[pane])) {
             paneltransit[pane] = true;
@@ -563,7 +642,7 @@
             thecontents.style.display = "block";
             setTimeout(function() {
                 thepanel.style.opacity = "1";
-                thepanel.style.height = "80em";
+                thepanel.style.height = "85%";
                 thecontents.style.opacity = "1";
             }, 20);
             setTimeout(function(){
@@ -572,13 +651,26 @@
         } else if (!paneltransit[pane]) {
             paneltransit[pane] = true;
             thepanel.style.opacity = "0";
-            thepanel.style.height = "10em";
+            thepanel.style.height = "10%";
             thecontents.style.opacity = "1";
             setTimeout(function(){
                 thepanel.style.display = "none";
                 thecontents.style.display = "none";
                 paneltransit[pane] = false;
             }, 333);
+        }
+    }
+    
+    
+    function showHideD() {
+        var slider = document.getElementById("theslider");
+        var icon = document.getElementById("showhider").firstElementChild;
+        if (slider.style.visibility == "visible") {
+            slider.style.visibility = "hidden";
+            icon.innerHTML = '<path d="M80 50 Q50 80 20 50 Q50 80 80 50" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" /> <circle cx="50" cy="68" r="7" fill="#fff"/> <circle cx="30" cy="62" r="7" fill="#fff"/> <circle cx="70" cy="62" r="7" fill="#fff"/> <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">T</text>';
+        } else {
+            slider.style.visibility = "visible";
+            icon.innerHTML = '<path d="M80 50 Q50 20 20 50 Q50 80 80 50" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="8.8" /> <circle cx="50" cy="50" r="8.8" fill="#fff"/> <text x="80" y="94" font-size="2em" font-weight="bold" fill="#faa">T</text>';
         }
     }
     
@@ -629,27 +721,54 @@
         }
     }
     
-    function moveDice(direction) {
-        if (diceinmotion == false && [d_coords[0], gridsize[0] - d_coords[0], gridsize[1] - d_coords[1], d_coords[1]]["nsew".indexOf(direction)] > 0) {
-            diceinmotion = true;
-            if (keysheld.indexOf(74) == -1) {
+    function unreDice(undoing) {
+        if ((!diceinmotion) && ((undoing && rollptr < rollhistory.length) || ((!undoing) && rollptr))) {
+            var whattodo = [];
+            if (undoing) {
+                whattodo = rollhistory[rollptr++];
+            } else {
+                whattodo = rollhistory[--rollptr];
+            }
+            var tmp = dfreeze.slice(0);
+            dfreeze = whattodo.slice(1);
+            moveDice((undoing ? ["n","s","e","w"]["snwe".indexOf(whattodo[0])] : whattodo[0]), true);
+            dfreeze = tmp.slice(0);
+        }
+    }
+    
+    function moveDice(direction, undoing) {
+        if ((!diceinmotion) && document.getElementById("theslider").style.visibility == "visible" && (dfreeze[0] || [d_coords[0], gridsize[0] - d_coords[0], gridsize[1] - d_coords[1], d_coords[1]]["nsew".indexOf(direction)] > 0)) {
+            var didwhat = [direction, dfreeze[0], dfreeze[1]];
+            if (!dfreeze[0]) {
                 slideTheDice(direction);
             }
-            if (keysheld.indexOf(75) == -1) {
+            if (!dfreeze[1]) {
                 turnTheDice(direction);
             }
-            setTimeout(function() {
-                diceinmotion = false;
-                if (keysheld.length) {
-                    for (var ix = 0; ix < keysheld.length; ix++) {
-                        var vl = [87, 83, 68, 65].indexOf(keysheld[ix]);
-                        if (vl != -1) {
-                            moveDice("nsew"[vl]);
-                            return;
-                        }
+            if ((!dfreeze[0]) || (!dfreeze[1])) {
+                if (!undoing) {
+                    if (rollptr > 0) {
+                        rollhistory = rollhistory.slice(rollptr);
+                        rollptr = 0;
+                    }
+                    if (rollhistory.unshift(didwhat) > 9999) {
+                        rollhistory.pop();
                     }
                 }
-            }, 340);
+                diceinmotion = true;
+                setTimeout(function() {
+                    diceinmotion = false;
+                    if (keysheld.length) {
+                        for (var ix = 0; ix < keysheld.length; ix++) {
+                            var vl = [87, 83, 68, 65].indexOf(keysheld[ix]);
+                            if (vl != -1) {
+                                moveDice("nsew"[vl], false);
+                                return;
+                            }
+                        }
+                    }
+                }, 340);
+            }
         }
     }
     
@@ -728,12 +847,12 @@
         }
         thecells = thecells.filter(function(cell) { return givendigits.indexOf(cell) == -1; }); // to ensure that given digits are not affected
         if (thetab == "centre") {
-            didwhat = ["centre", num, thecells.filter(function(cell) { return document.getElementById("n_" + cell[1] + "_" + cell[3]).style.fontSize != "7.7em"; })];
+            didwhat = ["centre", num, thecells.filter(function(cell) { return /font-size((:)|(="))8em/.test(document.getElementById("n_" + cell[1] + "_" + cell[3]).innerHTML) == false; })];
             didwhat[2].forEach(function(cell) {
                 cellnums.centres[cell[1] - 1][cell[3] - 1][num] = (cellnums.centres[cell[1] - 1][cell[3] - 1][num] == num ? "" : num);
             });
         } else if (thetab == "corner") {
-            didwhat = ["corner", num, thecells.filter(function(cell) { return document.getElementById("n_" + cell[1] + "_" + cell[3]).style.fontSize != "7.7em"; })];
+            didwhat = ["corner", num, thecells.filter(function(cell) { return /font-size((:)|(="))8em/.test(document.getElementById("n_" + cell[1] + "_" + cell[3]).innerHTML) == false; })];
             didwhat[2].forEach(function(cell) {
                 cellnums.corners[cell[1] - 1][cell[3] - 1][num] = (cellnums.corners[cell[1] - 1][cell[3] - 1][num] == num ? " " : num);
             });
@@ -741,24 +860,24 @@
             didwhat = ["place", num, [], []];
             thecells.forEach(function(cell) {
                 var toplace = document.getElementById("n_" + cell[1] + "_" + cell[3]);
-                if (toplace.style.fontSize != "7.7em" || toplace.innerHTML != num) {
+                var already = /font-size((:)|(="))8em/.test(toplace.innerHTML);
+                if ((!already) || /\d<\/text>/.exec(toplace.innerHTML)[0] != num.toString(10)) {
                     didwhat[2].push(cell);
-                    didwhat[3].push(toplace.style.fontSize == "7.7em");
-                    if (toplace.style.fontSize != "7.7em") {
-                        toplace.style.fontSize = "7.7em";
-                        toplace.style.lineHeight = "1.05em";
-                        toplace.style.fontWeight = "normal";
+                    didwhat[3].push(already);
+                    if (!already) {
                         didwhat[3].push([cellnums.centres[cell[1] - 1][cell[3] - 1].slice(0), cellnums.corners[cell[1] - 1][cell[3] - 1].slice(0)]);
+                        cellnums.corners[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
+                        cellnums.centres[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
                     } else {
                         didwhat[3].push(toplace.innerHTML);
                     }
-                    toplace.innerHTML = num;
+                    toplace.innerHTML = '<text x="0.33em" y="1em" style="font-size:8em;stroke:#fff;stroke-width:0.075em;" fill="#55f">' + num + '</text><text x="0.33em" y="1em" style="font-size:8em" fill="#55f">' + num + '</text>';
                 }
             });
             return didwhat;
         }
         thecells.forEach(function(cell) {
-            if (document.getElementById("n_" + cell[1] + "_" + cell[3]).style.fontSize != "7.7em") {
+            if (/font-size((:)|(="))8em/.test(document.getElementById("n_" + cell[1] + "_" + cell[3]).innerHTML) == false) {
                 renderCandidates(cell);
             }
         });
@@ -785,9 +904,9 @@
             thecells = thecells.filter(function(cell) { return givendigits.indexOf(cell) == -1; });
             thecells.forEach(function(cell) {
                 var corner = cellnums.corners[cell[1] - 1][cell[3] - 1];
-                if (corner.join("") != "          ") {
+                if (corner.join("").length) {
                     didwhat[1].push([cell, "corner", corner.slice(0)]);
-                    cellnums.corners[cell[1] - 1][cell[3] - 1] = [" "," "," "," "," "," "," "," "," "," "];
+                    cellnums.corners[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
                     renderCandidates(cell);
                 }
             });
@@ -796,17 +915,14 @@
                 var todel = document.getElementById("n_" + cell[1] + "_" + cell[3]);
                 var corner = cellnums.corners[cell[1] - 1][cell[3] - 1];
                 var centre = cellnums.centres[cell[1] - 1][cell[3] - 1];
-                if (todel.style.fontSize == "7.7em") {
+                if (/font-size((:)|(="))8em/.test(todel.innerHTML)) {
                     if (givendigits.indexOf(cell) == -1) {
                         didwhat[1].push([cell, "place", todel.innerHTML]);
-                        todel.style.fontSize = "1.5em";
-                        todel.style.lineHeight= "1.25em";
-                        todel.style.fontWeight = "bold";
                         todel.innerHTML = "";
                     }
-                } else if (centre.join("").length || (corner.join("") != "          ")) {
+                } else if (centre.join("").length || corner.join("").length) {
                     didwhat[1].push([cell, "candidates", centre.slice(0), corner.slice(0)]);
-                    cellnums.corners[cell[1] - 1][cell[3] - 1] = [" "," "," "," "," "," "," "," "," "," "];
+                    cellnums.corners[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
                     cellnums.centres[cell[1] - 1][cell[3] - 1] = ["","","","","","","","","",""];
                     todel.innerHTML = "";
                 } else if (document.getElementById(cell).style.backgroundColor != "#fff") {
@@ -864,8 +980,6 @@
                         } else {
                             cellnums.centres[cell[1] - 1][cell[3] - 1] = whattodo[3][(ix * 2) + 1][0].slice(0);
                             cellnums.corners[cell[1] - 1][cell[3] - 1] = whattodo[3][(ix * 2) + 1][1].slice(0);
-                            nums.style.fontSize = "1.5em";
-                            nums.style.lineHeight= "1.25em";
                             renderCandidates(cell);
                         }
                     });
@@ -889,10 +1003,7 @@
                                 break;
                             case "place":
                                 var toplace = document.getElementById("n_" + cell[1] + "_" + cell[3]);
-                                toplace.style.fontSize = "7.7em";
-                                toplace.style.lineHeight = "1.05em";
-                                toplace.style.fontWeight = "normal";
-                                toplace.innerHTML = dt[1];
+                                toplace.innerHTML = '<text x="0.33em" y="1em" style="font-size:8em;stroke:#fff;stroke-width:0.075em;" fill="#55f">' + dt[1] + '</text><text x="0.33em" y="1em" style="font-size:8em" fill="#55f">' + dt[1] + '</text>';
                                 break;
                         }
                     });
@@ -926,10 +1037,10 @@
     }
     
     function renderCandidates(cell) {
-        var nums = document.getElementById("n_" + cell[1] + "_" + cell[3]);
         var corner = cellnums.corners[cell[1] - 1][cell[3] - 1];
-        nums.style.fontWeight = "bold";
-        nums.innerHTML = [corner[0],"  ",corner[1],"  ",corner[2],"<br>",corner[3],"        ",corner[4],"<br>",cellnums.centres[cell[1] - 1][cell[3] - 1].join(""),"<br>",corner[5],"        ",corner[6],"<br>",corner[7],"  ",corner[8],"  ",corner[9]].join("");
+        var where = corner.map(function(cd, ix) { return (cd == "" ? "" : '<text x="' + [1.4, 2.7, 3.8, 0.3, 4.9, 0.3, 4.9, 1.4, 2.7, 3.8][ix] + 'em" y="' + [1,1,1,2,2,4,4,5,5,5][ix] + '.27em" style="font-size:1.75em;font-weight:bold;fill:#55f;stroke:#fff;stroke-width:0.25em">' + cd + '</text>')} );
+        where.splice(5,0,'<text x="2.8em" y="3.25em" style="font-size:1.75em;font-weight:bold;fill:#55f;text-anchor:middle;stroke:#fff;stroke-width:0.25em">' + cellnums.centres[cell[1] - 1][cell[3] - 1].join("") + '</text>');
+        document.getElementById("n_" + cell[1] + "_" + cell[3]).innerHTML = where.join("") + where.join("").replace(/;stroke:#fff;stroke-width:0.25em/g,"");
     }
     
     
@@ -959,7 +1070,8 @@
     
     window.onkeydown = function(event) {
         var key = event.which || event.keyCode;
-        if ([48,61,82,107,109,173].indexOf(key) == -1 || keysheld.indexOf(17) == -1) {
+        console.log(key, keysheld);
+        if ([48,61,82,107,109,173,187,189].indexOf(key) == -1 || keysheld.indexOf(17) == -1) {
             event.preventDefault();
         } else {
             return;
@@ -1054,8 +1166,16 @@
                     reDo();
                 }
                 break;
+            case 69: // e
+            case 81: // q
+                dfreeze[+(key == 69)] = true;
+                break;
+            case 84: // t
+                showHideD();
+                break;
             case 74: // j
             case 75: // k
+                unreDice(!(key - 74));
                 break;
             default:
                 return;
@@ -1064,7 +1184,7 @@
             keysheld.unshift(key);
         }
         if (direction) {
-            moveDice(direction);
+            moveDice(direction, false);
         }
     };
     
@@ -1084,6 +1204,10 @@
                 } else {
                     changeTab(deftab, true);
                 }
+                break;
+            case 69:
+            case 81:
+                dfreeze[+(key == 69)] = false;
                 break;
         }
         key = keysheld.indexOf(key);
@@ -1134,6 +1258,7 @@
     
     document.addEventListener("blur", function(e) {
         keysheld = [];
+        dfreeze = [false,false];
         if (mousestatus[2] == "tilting") {
             noTilt();
         }
@@ -1160,7 +1285,7 @@
         if (mousestatus[2] == "tilting") {
             nottilted = false;
             tiltTheGrid([e.clientX, e.clientY]);
-        } else if (["selecting", "deselecting"].indexOf(mousestatus[2]) != -1 && tgt.classList.contains("maze-cell") && ((mousestatus[2] == "selecting") ^ (selectedcells.indexOf(tgt.id) != -1))) { // yes, XOR can be used in conditional evaluation.
+        } else if (["selecting", "deselecting"].indexOf(mousestatus[2]) != -1 && tgt.classList.contains("maze-cell") && ((mousestatus[2] == "selecting") ^ (selectedcells.indexOf(tgt.id) != -1))) { // yes, XOR can be used in conditional evaluation
             selcell(tgt);
             sel_ptr = [parseInt(tgt.id[1], 10), parseInt(tgt.id[3], 10)];
         }
@@ -1270,7 +1395,7 @@
                         cellnums.corners.push([]);
                         cellnums.centres.push([]);
                         for (var col = 0; col < deco[1]; col++) {
-                            cellnums.corners[row].push([" "," "," "," "," "," "," "," "," "," "]);
+                            cellnums.corners[row].push(["","","","","","","","","",""]);
                             cellnums.centres[row].push(["","","","","","","","","",""]);
                             var cell = document.createElement("DIV");
                             cell.classList.add("maze-cell");
@@ -1278,13 +1403,13 @@
                             cell.style = "top:" + ((row * 10) - 0.1) + "em; left:" + (col * 10) + "em; background-color:#fff; border:0.05em solid #000;";
                             grid.appendChild(cell);
                             var numholder = document.createElement("DIV");
-                            var nums = document.createElement("DIV");
+                            var nums = document.createElement("SVG");
                             numholder.classList.add("num-container");
                             numholder.style = "top:" + ((row * 10) - 0.1) + "em; left:" + (col * 10) + "em;";
-                            nums.classList.add("cell-numbers");
                             nums.id = "n_" + (row + 1) + "_" + (col + 1);
                             numholder.appendChild(nums);
-                            grid.appendChild(numholder); // forgive me, Github, for I have sinned...
+                            grid.appendChild(numholder);
+                            document.getElementById("n_" + (row + 1) + "_" + (col + 1)).outerHTML = '<svg height="100%" width="100%" id="n_' + (row + 1) + '_' + (col + 1) + '"></svg>' // I have absolutely no idea why this works when none of the other gajillion things I tried kept messing up the positioning of the sub-elements, but at this point I don't care...
                         }
                     }
                     break;
@@ -1340,27 +1465,22 @@
                         thedecor.innerHTML += '<line x1="' + acoord[0] + 'em" y1="' + acoord[1] + 'em" x2="' + (acoord[0] + headr[0][0]) + 'em" y2="' + (acoord[1] + headr[0][1]) + 'em" style="stroke:#7f7f7f;stroke-width:0.75em;" /><line x1="' + acoord[0] + 'em" y1="' + acoord[1] + 'em" x2="' + (acoord[0] + headr[1][0]) + 'em" y2="' + (acoord[1] + headr[1][1]) + 'em" style="stroke:#7f7f7f;stroke-width:0.75em;" />';
                     });
                     break;
-                case "givens":
-                    givendigits = deco.map(function(cell) { return ("r" + cell[0] + "c" + cell[1]); });
-                    deco.forEach(function(given) {
-                        var toplace = document.getElementById("n_" + given[0] + "_" + given[1]);
-                        toplace.style.fontSize = "7.7em";
-                        toplace.style.lineHeight = "1.05em";
-                        toplace.style.fontWeight = "normal";
-                        toplace.style.color = "rgba(0,0,0,0.9)";
-                        toplace.innerHTML = given[2];
-                    });
-                    break;
                 case "odds":
                 case "evens":
                     deco.forEach(function(shape) { // row, column, colour
                         thedecor.innerHTML += (pos == "odds" ? ('<circle cx="' + ((shape[1] * 10) - 5) + 'em" cy="' + ((shape[0] * 10) - 5) + 'em" r="3.66em"') : ('<rect x="' + ((shape[1] * 10) - 8.3) + 'em" y="' + ((shape[0] * 10) - 8.3) + 'em" height="6.6em" width="6.6em"')) + 'style="opacity:0.75;fill:' + shape[2] + (shape[2] == "#7f7f7f" ? "" : ";stroke:" + ["#0a0","#f55"][["#5f5", "#a00"].indexOf(shape[2])] + ";stroke-width:0.33em") + ';" />';
                     });
                     break;
+                case "givens":
+                    givendigits = deco.map(function(cell) { return ("r" + cell[0] + "c" + cell[1]); });
+                    deco.forEach(function(given) {
+                        document.getElementById("n_" + given[0] + "_" + given[1]).innerHTML = '<text x="0.33em" y="1em" style="font-size:8em;stroke:#fff;stroke-width:0.075em;" fill="#fff">' + given[2] + '</text><text x="0.33em" y="1em" style="font-size:8em" fill="#000">' + given[2] + '</text>';
+                    });
+                    break;
             }
         });
         reSizing();
-        document.body.style.fontSize = (Math.min(window.innerWidth, window.innerHeight) * 0.0088) + "px"; // forgive me, github, for I have sinned
+        document.body.style.fontSize = (Math.min(window.innerWidth, window.innerHeight) * 0.009) + "px"; // forgive me, github, for I have sinned
     }
     
     setUp();
