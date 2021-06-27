@@ -682,7 +682,7 @@
             document.getElementById("tab_" + tab).classList.remove("noncur");
             document.getElementById("tab_" + tab).classList.add("curtab");
             currenttab = tab;
-            Array.prototype.slice.call(document.getElementsByClassName("padnum")).forEach(function(btn, ix) {
+            Array.prototype.slice.call(document.getElementsByClassName("padnum")).filter(function(bt) { return !(bt.classList.contains("b_low")) }).forEach(function(btn, ix) {
                 if (tab != "colour" && btn.classList.contains("colourtab")) {
                     btn.classList.remove("colourtab");
                 }
